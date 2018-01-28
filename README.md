@@ -1,7 +1,7 @@
 # Liferay Portal Security Audit
 
 This project refers to the article [Liferay Portal Security Audit](https://goo.gl/2Gx7tP) published by 
-Antonio Musarra's Blog. 
+[Antonio Musarra's Blog](https://www.dontesta.it). 
 
 At the beginning of the article the source code of 
 Liferay Portal Security Audit (freely available on GitHub) was examined. 
@@ -19,6 +19,7 @@ Figure 1. Macro Architecture of Liferay Portal Security Audit
 | **portal-security-audit-capture-events**  | This module contains components that capture portal events such as AuthFailure. These components trace events by sending them to message processors through the Audit Router  |
 | **portal-security-audit-router**  | This module contains the Standard Audit router component that implements the Audit Router interface  |
 | **portal-security-message-processor** | Questo modulo contiene i due message processor che abbiamo implementato nel corso di quest’articolo e che sono: Dummy Audit Message Processor e Login Failure Message Processor  |
+
 Table 1. New modules added to the Liferay Portal Security Audit system
 
 
