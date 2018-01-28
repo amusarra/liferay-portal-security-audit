@@ -1,4 +1,4 @@
-# Liferay Portal Security Audit
+# Liferay 7 Portal Security Audit
 
 This project refers to the article [Liferay Portal Security Audit](https://goo.gl/2Gx7tP) published by 
 [Antonio Musarra's Blog](https://www.dontesta.it). 
