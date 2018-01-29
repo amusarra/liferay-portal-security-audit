@@ -18,7 +18,7 @@ Figure 1. Macro Architecture of Liferay Portal Security Audit
 | ------------- | ------------- |
 | **portal-security-audit-capture-events**  | This module contains components that capture portal events such as AuthFailure. These components trace events by sending them to message processors through the Audit Router  |
 | **portal-security-audit-router**  | This module contains the Standard Audit router component that implements the Audit Router interface  |
-| **portal-security-message-processor** | Questo modulo contiene i due message processor che abbiamo implementato nel corso di quest’articolo e che sono: Dummy Audit Message Processor e Login Failure Message Processor  |
+| **portal-security-message-processor** | This module contains the two message processors that we have implemented in the course of this article and which are: Dummy Audit Message Processor and Login Failure Message Processor  |
 
 Table 1. New modules added to the Liferay Portal Security Audit system
 
