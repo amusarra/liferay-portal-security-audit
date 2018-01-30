@@ -9,5 +9,10 @@ Bundle-SymbolicName: it.dontesta.labs.liferay.portal.security.audit.message.proc
 Bundle-Vendor: Antonio Musarra's Blog
 Bundle-Version: 1.0.0
 
+Import-Package:\
+	com.codahale.metrics;resolution:=optional,\
+	io.micrometer.core.instrument;resolution:=optional,\
+	*
+
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title: Audit
