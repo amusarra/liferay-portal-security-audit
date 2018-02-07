@@ -25,6 +25,20 @@ Figure 1. Macro Architecture of Liferay Portal Security Audit
 
 Table 1. New modules added to the Liferay Portal Security Audit system
 
+The module **portal-security-audit-capture-events** contains the follow OSGi components for capture this events:
+1. Login Failure
+2. Login Post Action
+3. Logout Post Action
+
+The module **portal-security-message-processor** contains the follow OSGi components for processing audit messages:
+1. Dummy Audit Message Processor
+2. Login Failure Message Processor
+3. **(Updated) Cloud AMQP Audit Message Processor**
+
+For more information about the *Cloud AMQP Audit Message Processor* I advise you to read
+[CloudAMQP Audit Message Processor for Liferay 7/DXP](https://dzone.com/articles/liferay-7-cloud-amqp-audit-message-processor)
+that I published on DZone portal.
+
 This project is an excellent starting point that you can certainly extend
 according to your needs, thus obtaining an Audit Service system starting
 from the framework at the base of the Liferay Portal Security Audit.
