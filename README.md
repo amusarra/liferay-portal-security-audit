@@ -4,8 +4,8 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/antonio_musarra.svg?style=social&label=%40antonio_musarra%20on%20Twitter&style=plastic)](https://twitter.com/antonio_musarra)
 
 
-This project refers to the article [Liferay Portal Security Audit](https://goo.gl/2Gx7tP) published by
-[Antonio Musarra's Blog](https://www.dontesta.it).
+This project refers to the ebook [Liferay Portal Security Audit](https://goo.gl/AC8VRo) published by
+[Antonio Musarra's Blog](https://www.dontesta.it) on the Amazon Kindle Store.
 
 At the beginning of the article the source code of
 Liferay Portal Security Audit (freely available on GitHub) was examined.
