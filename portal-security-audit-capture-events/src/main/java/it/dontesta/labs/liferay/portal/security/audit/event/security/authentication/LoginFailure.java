@@ -32,10 +32,9 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.AuthFailure;
 import com.liferay.portal.kernel.service.UserLocalService;
 
-import it.dontesta.labs.liferay.portal.security.audit.router.constants.EventTypes;
-
 import java.util.Map;
 
+import com.liferay.portal.security.audit.event.generators.constants.EventTypes;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 

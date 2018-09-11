@@ -25,6 +25,10 @@ Figure 1. Macro Architecture of Liferay Portal Security Audit
 
 Table 1. New modules added to the Liferay Portal Security Audit system
 
+Version 7.1 of Liferay has *introduced the implementation of a default router*, 
+for this reason in this version of the project there is no longer the bundle
+**portal-security-audit-router**.
+
 The module **portal-security-audit-capture-events** contains the follow OSGi components for capture this events:
 1. Login Failure
 2. Login Post Action
@@ -33,7 +37,7 @@ The module **portal-security-audit-capture-events** contains the follow OSGi com
 The module **portal-security-message-processor** contains the follow OSGi components for processing audit messages:
 1. Dummy Audit Message Processor
 2. Login Failure Message Processor
-3. **(Updated) Cloud AMQP Audit Message Processor**
+3. Cloud AMQP Audit Message Processor
 
 For more information about the *Cloud AMQP Audit Message Processor* I advise you to read
 [CloudAMQP Audit Message Processor for Liferay 7/DXP](https://dzone.com/articles/liferay-7-cloud-amqp-audit-message-processor)
@@ -52,37 +56,59 @@ $ ./gradlew clean deploy
 $ cp ../bundles/osgi/modules/*.jar $LIFERAY_HOME/deploy/
 ```
 
-In the my case $LIFERAY_HOME is set on this directory /opt/liferay-ce-portal-7.0-ga5
+In the my case $LIFERAY_HOME is set on this directory /Users/antoniomusarra/dev/liferay/liferay-ce-portal-7.1.0-ga1
 
-Verify the correct deployment of the three bundles via the Liferay log file or
+Verify the correct deployment of the two bundles via the Liferay log file or
 through the Gogo Shell using the lb command, making sure that the status is
 Active.
+
+From Liferay version 7.1 GA1 access to the GogoShell via telnet has been disabled. 
+To re-enable access, you need to set the portal in developer mode. Form more info
+read this [setting developer mode for your server using portal-developer.properties](https://dev.liferay.com/en/develop/tutorials/-/knowledge_base/7-1/using-developer-mode-with-themes#setting-developer-mode-for-your-server-using-portal-developer-properties)
 
 ```
 $ telnet localhost 11311
 
-g! lb|grep Audit
-  342|Active     |   10|Liferay Portal Security Audit API (2.0.2)
-  343|Active     |   10|Liferay Portal Security Audit Wiring (2.0.4)
-  584|Active     |   10|Liferay Portal Security Audit Capture Events (1.0.0)
-  586|Active     |   10|Liferay Portal Security Audit Message Processor (1.0.0)
-  587|Active     |   10|Liferay Portal Security Audit Router (1.0.0)
+g! lb | grep Audit
+  621|Active     |   10|Liferay CE Foundation - Liferay CE Security Audit - API (1.0.0)
+  622|Active     |   10|Liferay Portal Security Audit API (3.0.1)
+  623|Active     |   10|Liferay Portal Security Audit Event Generators API (2.0.0)
+  624|Active     |   10|Liferay Portal Security Audit Storage API (3.0.0)
+  716|Active     |   10|Liferay CE Foundation - Liferay CE Security Audit - Impl (1.0.0)
+  717|Active     |   10|Liferay Portal Security Audit Event Generators User Management (2.0.0)
+  718|Active     |   10|Liferay Portal Security Audit Implementation (1.0.1)
+  719|Active     |   10|Liferay Portal Security Audit Router (3.0.1)
+  720|Active     |   10|Liferay Portal Security Audit Storage Service (3.0.0)
+  721|Active     |   10|Liferay Portal Security Audit Wiring (3.0.0)
+  943|Active     |   10|Liferay Portal Security Audit Capture Events (1.1.0)
+  944|Active     |   10|Liferay Portal Security Audit Message Processor (1.1.0)
 ```
+As you can see, version 7.1 of Liferay has introduced several more bundles about 
+the audit framework. One of the most important bundles is the one that implements 
+the Audit Router.
 
-After installing the three bundles, you can access the configuration via the
+After installing the two bundles, you can access the configuration via the
 Liferay control panel.
 
-![Liferay PortalSecurity Audit - Configuration](https://www.dontesta.it/wp-content/uploads/2018/01/LiferayPortalSecurityAuditConfiguration_1.png)
+![Liferay Portal Security Audit - Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_1.png)
 
-Figure 1. OSGi Configuration of the three bundles.
+Figure 1. OSGi Configuration of the Audit bundles.
 
-![Liferay PortalSecurity Audit - Dummy Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/01/LiferayPortalSecurityAuditConfiguration_2.png)
+![Liferay Portal Security Audit - Audit Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_2.png)
 
-Figure 2. OSGi Configuration of the Dummy Message Audit Processor
+Figure 2. General Audit Configuration and configuration for the custom Audit Message Processor
 
-![Liferay PortalSecurity Audit - Login Failure Message Processor Configuration_3](https://www.dontesta.it/wp-content/uploads/2018/01/LiferayPortalSecurityAuditConfiguration_3.png)
+![Liferay Portal Security Audit - Dummy Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_3.png)
 
-Figure 3. OSGi Configuration of the Login Failure Message Audit Processor
+Figure 3. OSGi Configuration of the Dummy Message Audit Processor
+
+![Liferay Portal Security Audit - Login Failure Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_4.png)
+
+Figure 4. OSGi Configuration of the Login Failure Message Audit Processor
+
+![Liferay Portal Security Audit - CloudAMQP Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_5.png)
+
+Figure 4. OSGi Configuration of the CloudAMQP Message Audit Processor
 
 If you enable Audit, then the two message processors and finally the Scheduler
 Helper Engine, on Liferay log files, you will see the audit messages (of the
@@ -108,9 +134,21 @@ Send report audit email to antonio.musarra@gmail.com
 Log 2. Login Failure Audit Message Processor that trace LOGIN_FAILURE event
 and send email
 
+```
+2018-09-11 20:12:45.037 INFO  [liferay/audit-1][CloudAMQPAuditMessageProcessor:125]
+ Message Audit processed and published on liferay_audit_queue Cloud AMQP queue. 
+ Details {{product=RabbitMQ, copyright=Copyright (c) 2007-2017 Pivotal Software, 
+ Inc., capabilities=
+ {exchange_exchange_bindings=true, connection.blocked=true, 
+ authentication_failure_close=true, basic.nack=true, publisher_confirms=true, 
+ consumer_cancel_notify=true}, information=Licensed under the MPL. 
+ See http://www.rabbitmq.com/, version=5.1.2, platform=Java}}
+```
+Log 3. CloudAMQP Audit Message Processor that trace LOGIN_FAILURE event
+
 ![Liferay PortalSecurity Audit - Login Failure Audit Message Processor Email Report](https://www.dontesta.it/wp-content/uploads/2018/01/LiferayPortalSecurityAuditConfiguration_4.png)
 
-Figure 4. Email send by Login Failure Audit Message Processor
+Figure 5. Email send by Login Failure Audit Message Processor
 
 ## License
 MIT License
