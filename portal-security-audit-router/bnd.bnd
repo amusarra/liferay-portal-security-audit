@@ -7,7 +7,7 @@ Bundle-License: MIT License
 Bundle-Name: Liferay Portal Security Audit Router
 Bundle-SymbolicName: it.dontesta.labs.liferay.portal.security.audit.router
 Bundle-Vendor: Antonio Musarra's Blog
-Bundle-Version: 1.0.0
+Bundle-Version: 1.1.0
 
 Export-Package:\
 	it.dontesta.labs.liferay.portal.security.audit.router,\
