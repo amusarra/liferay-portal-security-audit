@@ -29,8 +29,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.security.audit.AuditMessageProcessor;
 
+import com.liferay.portal.security.audit.event.generators.constants.EventTypes;
 import it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.LoginFailureAuditMessageProcessorConfiguration;
-import it.dontesta.labs.liferay.portal.security.audit.router.constants.EventTypes;
 
 import java.util.Map;
 

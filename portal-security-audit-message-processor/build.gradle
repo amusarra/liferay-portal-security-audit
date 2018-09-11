@@ -1,13 +1,14 @@
 dependencies {
 	compileInclude group: "com.rabbitmq", name: "amqp-client", version: "5.1.2"
 
-	compileOnly project(":apps:foundation:portal-security-audit:portal-security-audit-router")
-
 	provided group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.1.0"
-	provided group: "com.liferay", name: "com.liferay.portal.configuration.metatype", version: "2.0.0"
-	provided group: "com.liferay", name: "com.liferay.portal.security.audit.api", version: "2.0.2"
-	provided group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.46.0"
+	provided group: "com.liferay", name: "com.liferay.portal.configuration.metatype", version: "2.0.12"
+	provided group: "com.liferay", name: "com.liferay.portal.security.audit.api", version: "3.0.1"
+	provided group: "com.liferay", name: "com.liferay.portal.security.audit.event.generators.api", version: "2.0.0"
+	provided group: 'com.liferay', name: 'com.liferay.petra.string', version: '2.0.0'
+	provided group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "3.0.0"
 	provided group: "javax.mail", name: "mail", version: "1.4"
-	provided group: "org.osgi", name: "org.osgi.core", version: "5.0.0"
+
+	provided group: "org.osgi", name: "org.osgi.core", version: "6.0.0"
 	provided group: "org.osgi", name: "org.osgi.service.component.annotations", version: "1.3.0"
 }
