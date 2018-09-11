@@ -28,7 +28,7 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 /**
  * @author Antonio Musarra
  */
-@ExtendedObjectClassDefinition(category = "foundation")
+@ExtendedObjectClassDefinition(category = "audit")
 @Meta.OCD(
 	id = "it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.LoginFailureAuditMessageProcessorConfiguration",
 	localization = "content/Language",
