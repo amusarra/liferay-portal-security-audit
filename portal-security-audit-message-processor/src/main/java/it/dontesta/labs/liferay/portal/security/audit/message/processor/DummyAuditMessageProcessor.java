@@ -22,6 +22,7 @@
 package it.dontesta.labs.liferay.portal.security.audit.message.processor;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.audit.AuditException;
 import com.liferay.portal.kernel.audit.AuditMessage;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -63,7 +64,7 @@ public class DummyAuditMessageProcessor implements AuditMessageProcessor {
 				DummyAuditMessageProcessorConfiguration.class, properties);
 	}
 
-	protected void doProcess(AuditMessage auditMessage) throws Exception {
+	protected void doProcess(AuditMessage auditMessage) {
 		if (_dummyAuditMessageProcessorConfiguration.enabled()) {
 			if (_log.isInfoEnabled()) {
 				_log.info(
@@ -76,7 +77,7 @@ public class DummyAuditMessageProcessor implements AuditMessageProcessor {
 	private static final Log _log = LogFactoryUtil.getLog(
 		DummyAuditMessageProcessor.class);
 
-	private volatile DummyAuditMessageProcessorConfiguration
+	private DummyAuditMessageProcessorConfiguration
 		_dummyAuditMessageProcessorConfiguration;
 
 }
