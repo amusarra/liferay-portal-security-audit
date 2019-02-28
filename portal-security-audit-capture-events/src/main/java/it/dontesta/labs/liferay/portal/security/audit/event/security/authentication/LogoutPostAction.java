@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.audit.AuditRouter;
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.LifecycleAction;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.Portal;
 
@@ -59,7 +60,7 @@ public class LogoutPostAction extends Action {
 
 	private void _doRun(
 			HttpServletRequest request, HttpServletResponse response)
-		throws Exception {
+		throws PortalException {
 
 		User user = _portal.getUser(request);
 
