@@ -45,6 +45,6 @@ buildScan {
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '4.1'
-	jarFile = "${project.projectDir}/.gradle-wrapper/gradle-wrapper.jar"
+	gradleVersion = '4.10'
+	jarFile = "${project.projectDir}/gradle/wrapper/gradle-wrapper.jar"
 }
