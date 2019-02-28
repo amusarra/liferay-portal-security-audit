@@ -113,7 +113,7 @@ public class LoginFailureAuditMessageProcessor
 	private static final Log _log = LogFactoryUtil.getLog(
 		LoginFailureAuditMessageProcessor.class);
 
-	private volatile LoginFailureAuditMessageProcessorConfiguration
+	private LoginFailureAuditMessageProcessorConfiguration
 		_loginFailureAuditMessageProcessorConfiguration;
 
 }

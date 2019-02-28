@@ -63,7 +63,7 @@ public class DummyAuditMessageProcessor implements AuditMessageProcessor {
 				DummyAuditMessageProcessorConfiguration.class, properties);
 	}
 
-	protected void doProcess(AuditMessage auditMessage) throws Exception {
+	protected void doProcess(AuditMessage auditMessage) {
 		if (_dummyAuditMessageProcessorConfiguration.enabled()) {
 			if (_log.isInfoEnabled()) {
 				_log.info(
@@ -76,7 +76,7 @@ public class DummyAuditMessageProcessor implements AuditMessageProcessor {
 	private static final Log _log = LogFactoryUtil.getLog(
 		DummyAuditMessageProcessor.class);
 
-	private volatile DummyAuditMessageProcessorConfiguration
+	private DummyAuditMessageProcessorConfiguration
 		_dummyAuditMessageProcessorConfiguration;
 
 }
