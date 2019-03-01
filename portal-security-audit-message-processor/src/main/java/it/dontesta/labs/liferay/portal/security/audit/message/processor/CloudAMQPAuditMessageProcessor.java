@@ -34,13 +34,11 @@ import com.rabbitmq.client.ConnectionFactory;
 
 import it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.CloudAMQPAuditMessageProcessorConfiguration;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -81,7 +79,7 @@ public class CloudAMQPAuditMessageProcessor implements AuditMessageProcessor {
 	}
 
 	protected void doProcess(AuditMessage auditMessage)
-		throws IOException, TimeoutException, NoSuchAlgorithmException,
+		throws NoSuchAlgorithmException,
 		KeyManagementException, URISyntaxException {
 
 		if (_cloudAMQPAuditMessageProcessorConfiguration.enabled()) {
