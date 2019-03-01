@@ -70,7 +70,7 @@ public class LoginFailureAuditMessageProcessor
 				properties);
 	}
 
-	protected void doProcess(AuditMessage auditMessage) throws Exception {
+	protected void doProcess(AuditMessage auditMessage) {
 		if (_loginFailureAuditMessageProcessorConfiguration.enabled()) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
