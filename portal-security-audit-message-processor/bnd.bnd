@@ -12,7 +12,8 @@ Bundle-Version: 1.1.0
 Import-Package:\
 	com.codahale.metrics;resolution:=optional,\
 	io.micrometer.core.instrument;resolution:=optional,\
+	org.slf4j.impl;resolution:=optional,\
 	*
 
-Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Description: Liferay Portal Security Audit
 Liferay-Releng-Module-Group-Title: Audit
