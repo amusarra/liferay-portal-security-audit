@@ -15,5 +15,5 @@ Import-Package:\
 	org.slf4j.impl;resolution:=optional,\
 	*
 
-Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Description: Liferay Portal Security Audit
 Liferay-Releng-Module-Group-Title: Audit
