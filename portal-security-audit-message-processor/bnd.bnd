@@ -1,6 +1,6 @@
 Bundle-Category: Liferay Audit
 Bundle-ContactAddress: https://www.dontesta.it/contatti
-Bundle-Copyright: Antonio Musarra's Blog (c) 2018
+Bundle-Copyright: Antonio Musarra's Blog (c) 2019
 Bundle-Developers: antonio.musarra@gmail.com
 Bundle-DocURL: https://www.dontesta.it
 Bundle-License: MIT License
@@ -12,6 +12,7 @@ Bundle-Version: 1.1.0
 Import-Package:\
 	com.codahale.metrics;resolution:=optional,\
 	io.micrometer.core.instrument;resolution:=optional,\
+	org.slf4j.impl;resolution:=optional,\
 	*
 
 Liferay-Releng-Module-Group-Description:
