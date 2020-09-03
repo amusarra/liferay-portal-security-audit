@@ -1,50 +1,54 @@
 buildscript {
-	dependencies {
-		classpath group: "com.gradle", name: "build-scan-plugin", version: "1.16"
-		classpath group: "com.liferay", name: "com.liferay.gradle.plugins", version: "4.4.34"
-		classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
-	}
+    dependencies {
+        classpath group: "com.gradle", name: "build-scan-plugin",
+                version: "1.16"
+        classpath group: "com.liferay", name: "com.liferay.gradle.plugins",
+                version: "4.4.34"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
+    }
 
-	repositories {
-		maven {
-			url "https://plugins.gradle.org/m2/"
-			}
-		maven { url "https://repository-cdn.liferay.com/nexus/content/groups/public" }
-	}
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+        }
+    }
 }
 
 subprojects {
-	buildscript {
-		repositories {
-			maven {
-				url "https://repository-cdn.liferay.com/nexus/content/groups/public"
-			}
-		}
-	}
+    buildscript {
+        repositories {
+            maven {
+                url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+            }
+        }
+    }
 
-	apply plugin: "com.liferay.plugin"
+    apply plugin: "com.liferay.plugin"
 
-	plugins.withId("java") {
-		sourceCompatibility = "1.8"
-	}
+    plugins.withId("java") {
+        sourceCompatibility = "1.8"
+    }
 
 
-	repositories {
-		maven {
-			url "https://repository-cdn.liferay.com/nexus/content/groups/public"
-		}
-	}
+    repositories {
+        maven {
+            url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+        }
+    }
 }
 
 apply plugin: "com.gradle.build-scan"
 apply plugin: "org.sonarqube"
 
 buildScan {
-	termsOfServiceUrl = "https://gradle.com/terms-of-service"
-	termsOfServiceAgree = "yes"
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = "yes"
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '4.10'
-	jarFile = "${project.projectDir}/gradle/wrapper/gradle-wrapper.jar"
+    gradleVersion = '4.10'
+    jarFile = "${project.projectDir}/gradle/wrapper/gradle-wrapper.jar"
 }
