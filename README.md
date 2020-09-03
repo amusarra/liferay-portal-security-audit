@@ -57,7 +57,8 @@ $ ./gradlew clean deploy
 $ cp ../bundles/osgi/modules/*.jar $LIFERAY_HOME/deploy/
 ```
 
-In the my case $LIFERAY_HOME is set on this directory /Users/antoniomusarra/dev/liferay/liferay-ce-portal-7.1.0-ga1
+In the my case $LIFERAY_HOME is set on this directory 
+/Users/antoniomusarra/dev/liferay/liferay-ce-portal-7.2.1-ga2
 
 Verify the correct deployment of the two bundles via the Liferay log file or
 through the Gogo Shell using the lb command, making sure that the status is
@@ -71,21 +72,21 @@ read this [setting developer mode for your server using portal-developer.propert
 $ telnet localhost 11311
 
 g! lb | grep Audit
-  621|Active     |   10|Liferay CE Foundation - Liferay CE Security Audit - API (1.0.0)
-  622|Active     |   10|Liferay Portal Security Audit API (3.0.1)
-  623|Active     |   10|Liferay Portal Security Audit Event Generators API (2.0.0)
-  624|Active     |   10|Liferay Portal Security Audit Storage API (3.0.0)
-  716|Active     |   10|Liferay CE Foundation - Liferay CE Security Audit - Impl (1.0.0)
-  717|Active     |   10|Liferay Portal Security Audit Event Generators User Management (2.0.0)
-  718|Active     |   10|Liferay Portal Security Audit Implementation (1.0.1)
-  719|Active     |   10|Liferay Portal Security Audit Router (3.0.1)
-  720|Active     |   10|Liferay Portal Security Audit Storage Service (3.0.0)
-  721|Active     |   10|Liferay Portal Security Audit Wiring (3.0.0)
-  943|Active     |   10|Liferay Portal Security Audit Capture Events (1.1.0)
-  944|Active     |   10|Liferay Portal Security Audit Message Processor (1.1.0)
+  732|Active     |   10|Liferay CE Foundation - Liferay CE Security Audit - API (2.0.1)|2.0.1
+  733|Active     |   10|Liferay Portal Security Audit API (4.0.6)|4.0.6
+  734|Active     |   10|Liferay Portal Security Audit Event Generators API (3.0.4)|3.0.4
+  735|Active     |   10|Liferay Portal Security Audit Storage API (4.0.6)|4.0.6
+  833|Active     |   10|Liferay CE Foundation - Liferay CE Security Audit - Impl (2.0.1)|2.0.1
+  834|Active     |   10|Liferay Portal Security Audit Event Generators User Management (3.0.2)|3.0.2
+  835|Active     |   10|Liferay Portal Security Audit Implementation (2.0.1)|2.0.1
+  836|Active     |   10|Liferay Portal Security Audit Router (4.0.7)|4.0.7
+  837|Active     |   10|Liferay Portal Security Audit Storage Service (4.0.13)|4.0.13
+  838|Active     |   10|Liferay Portal Security Audit Wiring (4.0.7)|4.0.7
+ 1069|Active     |   10|Liferay Portal Security Audit Message Processor (1.1.0)|1.1.0
+ 1070|Active     |   10|Liferay Portal Security Audit Capture Events (1.1.0)|1.1.0
 ```
-As you can see, version 7.1 of Liferay has introduced several more bundles about 
-the audit framework. One of the most important bundles is the one that implements 
+As you can see, version 7.2 of Liferay has introduced several more bundles about 
+the audit framework. One of the most important bundles is the one implements 
 the Audit Router.
 
 After installing the two bundles, you can access the configuration via the
@@ -167,7 +168,7 @@ Thanks to SonarQube Team for free analysis solution for open source projects.
 ## License
 MIT License
 
-Copyright 2019 Antonio Musarra's Blog - https://www.dontesta.it
+Copyright 2009-2020 Antonio Musarra's Blog - https://www.dontesta.it
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
