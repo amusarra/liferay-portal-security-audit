@@ -5,10 +5,10 @@ dependencies {
 
 	compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.1.0"
 	compileOnly group: "com.liferay", name: "com.liferay.portal.configuration.metatype", version: "2.0.18"
-	compileOnly group: "com.liferay", name: "com.liferay.portal.security.audit.api", version: "4.0.4"
-	compileOnly group: "com.liferay", name: "com.liferay.portal.security.audit.event.generators.api", version: "3.0.2"
-	compileOnly group: "com.liferay", name: "com.liferay.petra.string", version: "3.0.0"
-	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "4.4.0"
+	compileOnly group: "com.liferay", name: "com.liferay.portal.security.audit.api", version: "4.0.6"
+	compileOnly group: "com.liferay", name: "com.liferay.portal.security.audit.event.generators.api", version: "3.0.4"
+	compileOnly group: "com.liferay", name: "com.liferay.petra.string", version: "3.0.1"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "4.35.3"
 	compileOnly group: "javax.mail", name: "mail", version: "1.4"
 
 	compileOnly group: "org.osgi", name: "org.osgi.core", version: "6.0.0"
