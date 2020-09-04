@@ -42,4 +42,8 @@ public final class SeverityNames {
 
 	public static final String SEVERITY_WARNING_LABEL = "WARNING";
 
+	private SeverityNames() {
+		throw new IllegalStateException("Utility class");
+	}
+
 }

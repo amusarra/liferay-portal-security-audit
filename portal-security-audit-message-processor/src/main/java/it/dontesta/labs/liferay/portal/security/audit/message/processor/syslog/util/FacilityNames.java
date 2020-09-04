@@ -56,4 +56,8 @@ public final class FacilityNames {
 
 	public static final String FACILITY_UUCP_LABEL = "UUCP";
 
+	private FacilityNames() {
+		throw new IllegalStateException("Utility class");
+	}
+
 }
