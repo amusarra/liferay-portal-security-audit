@@ -58,6 +58,13 @@ public class LoginPostAction extends Action {
 		}
 	}
 
+	/**
+	 * Business logic for construct the audit message
+	 *
+	 * @param request The {@link HttpServletRequest} request
+	 * @param response The {@link HttpServletResponse} response
+	 * @throws PortalException
+	 */
 	private void _doRun(
 			HttpServletRequest request, HttpServletResponse response)
 		throws PortalException {
