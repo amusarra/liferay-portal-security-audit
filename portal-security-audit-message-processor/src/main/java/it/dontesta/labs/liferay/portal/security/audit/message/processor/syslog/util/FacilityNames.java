@@ -7,8 +7,10 @@
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
   of the Software, and to permit persons to whom the Software is furnished to do so,
   subject to the following conditions:
+
   The above copyright notice and this permission notice shall be included in all
   copies or substantial portions of the Software.
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -17,27 +19,41 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration;
-
-import aQute.bnd.annotation.metatype.Meta;
-
-import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
+package it.dontesta.labs.liferay.portal.security.audit.message.processor.syslog.util;
 
 /**
  * @author Antonio Musarra
  */
-@ExtendedObjectClassDefinition(category = "audit")
-@Meta.OCD(
-	id = "it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.DummyAuditMessageProcessorConfiguration",
-	localization = "content/Language",
-	name = "dummy-audit-message-processor-configuration-name"
-)
-public interface DummyAuditMessageProcessorConfiguration {
+public final class FacilityNames {
 
-	@Meta.AD(
-		deflt = "false", description = "audit-message-processor-enabled-help",
-		name = "audit-message-processor-enabled", required = false
-	)
-	public boolean enabled();
+	public static final String FACILITY_ALERT_LABEL = "ALERT";
+
+	public static final String FACILITY_AUDIT_LABEL = "AUDIT";
+
+	public static final String FACILITY_AUTH_LABEL = "AUTH";
+
+	public static final String FACILITY_AUTHPRIV_LABEL = "AUTHPRIV";
+
+	public static final String FACILITY_CLOCK_LABEL = "CLOCK";
+
+	public static final String FACILITY_CRON_LABEL = "CRON";
+
+	public static final String FACILITY_DAEMON_LABEL = "DAEMON";
+
+	public static final String FACILITY_FTP_LABEL = "FTP";
+
+	public static final String FACILITY_KERN_LABEL = "KERN";
+
+	public static final String FACILITY_LPR_LABEL = "LPR";
+
+	public static final String FACILITY_MAIL_LABEL = "MAIL";
+
+	public static final String FACILITY_NTP_LABEL = "NTP";
+
+	public static final String FACILITY_SYSLOG_LABEL = "SYSLOG";
+
+	public static final String FACILITY_USER_LABEL = "USER";
+
+	public static final String FACILITY_UUCP_LABEL = "UUCP";
 
 }

@@ -7,8 +7,10 @@
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
   of the Software, and to permit persons to whom the Software is furnished to do so,
   subject to the following conditions:
+
   The above copyright notice and this permission notice shall be included in all
   copies or substantial portions of the Software.
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -17,27 +19,27 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration;
-
-import aQute.bnd.annotation.metatype.Meta;
-
-import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
+package it.dontesta.labs.liferay.portal.security.audit.message.processor.syslog.util;
 
 /**
  * @author Antonio Musarra
  */
-@ExtendedObjectClassDefinition(category = "audit")
-@Meta.OCD(
-	id = "it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.DummyAuditMessageProcessorConfiguration",
-	localization = "content/Language",
-	name = "dummy-audit-message-processor-configuration-name"
-)
-public interface DummyAuditMessageProcessorConfiguration {
+public final class SeverityNames {
 
-	@Meta.AD(
-		deflt = "false", description = "audit-message-processor-enabled-help",
-		name = "audit-message-processor-enabled", required = false
-	)
-	public boolean enabled();
+	public static final String SEVERITY_ALERT_LABEL = "ALERT";
+
+	public static final String SEVERITY_CRITICAL_LABEL = "CRITICAL";
+
+	public static final String SEVERITY_DEBUG_LABEL = "DEBUG";
+
+	public static final String SEVERITY_EMERGENCY_LABEL = "EMERGENCY";
+
+	public static final String SEVERITY_ERROR_LABEL = "ERROR";
+
+	public static final String SEVERITY_INFORMATIONAL_LABEL = "INFORMATIONAL";
+
+	public static final String SEVERITY_NOTICE_LABEL = "NOTICE";
+
+	public static final String SEVERITY_WARNING_LABEL = "WARNING";
 
 }

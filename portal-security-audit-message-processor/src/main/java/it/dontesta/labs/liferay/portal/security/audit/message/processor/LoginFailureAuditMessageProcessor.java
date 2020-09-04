@@ -1,22 +1,20 @@
-/**
- * Copyright 2009-2020 Antonio Musarra's Blog - https://www.dontesta.it
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+/*
+  Copyright 2009-2020 Antonio Musarra's Blog - https://www.dontesta.it
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
-
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+  of the Software, and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package it.dontesta.labs.liferay.portal.security.audit.message.processor;
@@ -28,8 +26,8 @@ import com.liferay.portal.kernel.audit.AuditMessage;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.security.audit.AuditMessageProcessor;
-
 import com.liferay.portal.security.audit.event.generators.constants.EventTypes;
+
 import it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.LoginFailureAuditMessageProcessorConfiguration;
 
 import java.util.Map;
@@ -75,7 +73,8 @@ public class LoginFailureAuditMessageProcessor
 			if (_log.isDebugEnabled()) {
 				_log.debug(
 					"Login Failure processor processing " +
-					" this Audit Message => " + auditMessage.toJSONObject());
+						" this Audit Message => " +
+							auditMessage.toJSONObject());
 			}
 
 			InternetAddress fromAddress = null;
@@ -92,17 +91,22 @@ public class LoginFailureAuditMessageProcessor
 				mailMessage.setTo(toAddress);
 				mailMessage.setFrom(fromAddress);
 				mailMessage.setSubject(
-					_loginFailureAuditMessageProcessorConfiguration.emailSubject());
-				mailMessage.setBody(auditMessage.toJSONObject().toString());
+					_loginFailureAuditMessageProcessorConfiguration.
+						emailSubject());
+				mailMessage.setBody(
+					auditMessage.toJSONObject(
+					).toString());
 
 				MailServiceUtil.sendEmail(mailMessage);
 
 				if (_log.isInfoEnabled()) {
 					_log.info(
 						"Send report audit email to " +
-						_loginFailureAuditMessageProcessorConfiguration.reportTo());
+							_loginFailureAuditMessageProcessorConfiguration.
+								reportTo());
 				}
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				if (_log.isWarnEnabled()) {
 					_log.warn("Send email failed.", e);
 				}
