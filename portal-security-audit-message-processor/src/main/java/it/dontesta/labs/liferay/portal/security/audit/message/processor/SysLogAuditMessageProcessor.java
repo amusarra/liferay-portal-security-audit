@@ -27,22 +27,18 @@ import com.cloudbees.syslog.Severity;
 import com.cloudbees.syslog.sender.AbstractSyslogMessageSender;
 import com.cloudbees.syslog.sender.TcpSyslogMessageSender;
 import com.cloudbees.syslog.sender.UdpSyslogMessageSender;
-
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.audit.AuditMessage;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.security.audit.AuditMessageProcessor;
-
 import it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.SysLogAuditMessageProcessorConfiguration;
-
-import java.io.IOException;
-
-import java.util.Map;
-
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author Antonio Musarra
@@ -113,8 +109,10 @@ public class SysLogAuditMessageProcessor implements AuditMessageProcessor {
 				messageSender.setMessageFormat(MessageFormat.RFC_5425);
 			}
 
-			if (_sysLogAuditMessageProcessorConfiguration.enableSSL()) {
-				((TcpSyslogMessageSender)messageSender).setSsl(true);
+			if (_sysLogAuditMessageProcessorConfiguration.enableSSL() &&
+				"TCP".equals(
+					_sysLogAuditMessageProcessorConfiguration.protocol())) {
+				((TcpSyslogMessageSender) messageSender).setSsl(true);
 			}
 
 			try {
@@ -131,7 +129,7 @@ public class SysLogAuditMessageProcessor implements AuditMessageProcessor {
 	}
 
 	private AbstractSyslogMessageSender _getSysLogMessageSender() {
-		if ("UPD".equals(
+		if ("UDP".equals(
 				_sysLogAuditMessageProcessorConfiguration.protocol()) &&
 			!_sysLogAuditMessageProcessorConfiguration.enableSSL()) {
 
