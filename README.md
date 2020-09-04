@@ -39,6 +39,7 @@ The module **portal-security-message-processor** contains the follow OSGi compon
 1. Dummy Audit Message Processor
 2. Login Failure Message Processor
 3. Cloud AMQP Audit Message Processor
+4. Syslog Audit Message Processor (from version 1.3.0)
 
 For more information about the *Cloud AMQP Audit Message Processor* I advise you to read
 [CloudAMQP Audit Message Processor for Liferay 7/DXP](https://dzone.com/articles/liferay-7-cloud-amqp-audit-message-processor)
@@ -98,19 +99,23 @@ Figure 1. OSGi Configuration of the Audit bundles.
 
 ![Liferay Portal Security Audit - Audit Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_2.png)
 
-Figure 2. General Audit Configuration and configuration for the custom Audit Message Processor
+Figure 2. General Audit Configuration and configuration for the custom Audit Message Processor.
 
 ![Liferay Portal Security Audit - Dummy Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_3.png)
 
-Figure 3. OSGi Configuration of the Dummy Message Audit Processor
+Figure 3. OSGi Configuration of the Dummy Message Audit Processor.
 
 ![Liferay Portal Security Audit - Login Failure Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_4.png)
 
-Figure 4. OSGi Configuration of the Login Failure Message Audit Processor
+Figure 4. OSGi Configuration of the Login Failure Message Audit Processor.
 
 ![Liferay Portal Security Audit - CloudAMQP Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_5.png)
 
-Figure 4. OSGi Configuration of the CloudAMQP Message Audit Processor
+Figure 5. OSGi Configuration of the CloudAMQP Message Audit Processor.
+
+![Liferay Portal Security Audit - Syslog Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2020/09/LiferayPortalSecurityAudit_Configuration_6.png)
+
+Figure 6. OSGi Configuration of the Syslog Message Audit Processor.
 
 If you enable Audit, then the two message processors and finally the Scheduler
 Helper Engine, on Liferay log files, you will see the audit messages (of the
@@ -148,9 +153,16 @@ and send email
 ```
 Log 3. CloudAMQP Audit Message Processor that trace LOGIN_FAILURE event
 
+```
+Sep  4 15:36:43 400 <110>1 2020-09-04T13:36:43.646Z 192.168.1.7 myLiferayInstance - - - {"classPK":"35501","companyId":"20098","clientHost":"192.168.1.7","clientIP":"192.168.1.7","serverName":"192.168.1.7","className":"com.liferay.portal.kernel.model.User","eventType":"LOGIN","sessionID":"B96A590FF50471CD9DB393A45772E063","serverPort":8080,"userName":"Antonio Musarra","userId":"35501","timestamp":"20200904133643646"}
+Sep  4 13:38:38 192.168.1.7 myLiferayInstance {"classPK":"35501","companyId":"20098","clientHost":"192.168.1.7","clientIP":"192.168.1.7","serverName":"192.168.1.7","className":"com.liferay.portal.kernel.model.User","eventType":"LOGOUT","sessionID":"B96A590FF50471CD9DB393A45772E063","serverPort":8080,"userName":"Antonio Musarra","userId":"35501","timestamp":"20200904133838532"}
+```
+Log 4. Entry on the remote syslog server with two different message format. 
+
+
 ![Liferay PortalSecurity Audit - Login Failure Audit Message Processor Email Report](https://www.dontesta.it/wp-content/uploads/2018/01/LiferayPortalSecurityAuditConfiguration_4.png)
 
-Figure 5. Email send by Login Failure Audit Message Processor
+Figure 6. Email send by Login Failure Audit Message Processor
 
 ## Team Tools
 

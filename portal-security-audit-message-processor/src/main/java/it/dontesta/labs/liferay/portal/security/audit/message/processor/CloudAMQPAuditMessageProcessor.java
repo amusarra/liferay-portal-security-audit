@@ -35,9 +35,12 @@ import com.rabbitmq.client.ConnectionFactory;
 import it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.CloudAMQPAuditMessageProcessorConfiguration;
 
 import java.net.URISyntaxException;
+
 import java.nio.charset.StandardCharsets;
+
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Activate;
@@ -74,22 +77,23 @@ public class CloudAMQPAuditMessageProcessor implements AuditMessageProcessor {
 		if (_log.isInfoEnabled()) {
 			_log.info(
 				"Cloud AMQP Audit Message Processor enabled: " +
-				_cloudAMQPAuditMessageProcessorConfiguration.enabled());
+					_cloudAMQPAuditMessageProcessorConfiguration.enabled());
 		}
 	}
 
 	protected void doProcess(AuditMessage auditMessage)
-		throws NoSuchAlgorithmException,
-		KeyManagementException, URISyntaxException {
+		throws KeyManagementException, NoSuchAlgorithmException,
+			   URISyntaxException {
 
 		if (_cloudAMQPAuditMessageProcessorConfiguration.enabled()) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
 					"Cloud AMQP Audit Message processor processing " +
-					"this Audit Message => " + auditMessage.toJSONObject());
+						"this Audit Message => " + auditMessage.toJSONObject());
 			}
 
 			ConnectionFactory factory = new ConnectionFactory();
+
 			factory.setUri(_buildAMQPURI());
 
 			//Recommended settings
@@ -112,26 +116,31 @@ public class CloudAMQPAuditMessageProcessor implements AuditMessageProcessor {
 
 				try (Channel channel = connection.createChannel()) {
 					channel.queueDeclare(
-						_cloudAMQPAuditMessageProcessorConfiguration.queueName(),
+						_cloudAMQPAuditMessageProcessorConfiguration.
+							queueName(),
 						durable, exclusive, autoDelete, null);
 
 					channel.basicPublish(
 						"",
-						_cloudAMQPAuditMessageProcessorConfiguration.queueName(),
+						_cloudAMQPAuditMessageProcessorConfiguration.
+							queueName(),
 						null,
-						auditMessage.toJSONObject().toString().getBytes(
-							StandardCharsets.UTF_8));
+						auditMessage.toJSONObject(
+						).toString(
+						).getBytes(
+							StandardCharsets.UTF_8
+						));
 
 					if (_log.isInfoEnabled()) {
 						_log.info(
 							"Message Audit processed and published on " +
-							_cloudAMQPAuditMessageProcessorConfiguration.queueName() +
-							" Cloud AMQP queue. Details {" +
-							connection.getClientProperties().toString() +
-							"}");
+								_cloudAMQPAuditMessageProcessorConfiguration.
+									queueName() +
+										" Cloud AMQP queue. Details {" +
+											connection.getClientProperties(
+											).toString() + "}");
 					}
 				}
-
 			}
 			catch (Exception e) {
 				if (_log.isWarnEnabled()) {
