@@ -166,7 +166,7 @@ Figure 6. Email send by Login Failure Audit Message Processor
 
 ## Team Tools
 
-[![alt tag](http://pylonsproject.org/img/logo-jetbrains.png)](https://www.jetbrains.com/) 
+[![alt tag](http://pylonsproject.org/img/logo-jetbrains.png)](https://www.jetbrains.com/?from=LiferayPortalSecurityAudit) 
 
 Antonio Musarra's Blog Team would like inform that JetBrains is helping by 
 provided IDE to develop the application. Thanks to its support program for 
