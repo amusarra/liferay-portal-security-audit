@@ -7,3 +7,9 @@ dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api", version: "7.3.4-ga5"
 	compileOnly group: "javax.mail", name: "mail", version: "1.4"
 }
+
+version = "1.2.0-SNAPSHOT"
+
+jar {
+	bnd ('Bundle-Version': project.version)
+}

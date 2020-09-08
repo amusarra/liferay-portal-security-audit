@@ -7,7 +7,6 @@ Bundle-License: MIT License
 Bundle-Name: Liferay Portal Security Audit Capture Events
 Bundle-SymbolicName: it.dontesta.labs.liferay.portal.security.audit.event
 Bundle-Vendor: Antonio Musarra's Blog
-Bundle-Version: 1.1.0
 
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title: Audit
