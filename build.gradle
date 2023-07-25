@@ -2,7 +2,7 @@ buildscript {
     dependencies {
         classpath group: "com.liferay", name: "com.liferay.gradle.plugins",
                 version: "14.0.158"
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.2.0"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.2.1.3168"
     }
 
     repositories {
@@ -55,3 +55,11 @@ subprojects {
 }
 
 apply plugin: "org.sonarqube"
+
+sonar {
+    properties {
+        property "sonar.projectKey", "amusarra_liferay-portal-security-audit"
+        property "sonar.organization", "amusarra-github"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
