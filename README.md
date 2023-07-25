@@ -1,8 +1,7 @@
 # Liferay 7 Portal Security Audit
 [![Antonio Musarra's Blog](https://img.shields.io/badge/maintainer-Antonio_Musarra's_Blog-purple.svg?colorB=6e60cc)](https://www.dontesta.it)
-[![Build Status](https://travis-ci.org/amusarra/liferay-portal-security-audit.svg?branch=master)](https://travis-ci.org/amusarra/liferay-portal-security-audit)
+![Build and Package Status](https://github.com/amusarra/liferay-portal-security-audit/actions/workflows/gradle-publish.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=amusarra_liferay-portal-security-audit&metric=alert_status)](https://sonarcloud.io/dashboard?id=amusarra_liferay-portal-security-audit)
-[![Twitter Follow](https://img.shields.io/twitter/follow/antonio_musarra.svg?style=social&label=%40antonio_musarra%20on%20Twitter&style=plastic)](https://twitter.com/antonio_musarra)
 
 
 This project refers to the ebook [Liferay Portal Security Audit](https://goo.gl/AC8VRo) published by
@@ -11,7 +10,7 @@ This project refers to the ebook [Liferay Portal Security Audit](https://goo.gl/
 At the beginning of the article the source code of
 Liferay Portal Security Audit (freely available on GitHub) was examined.
 Later, in the article we also discussed how to implement the OSGi components
-necessary to obtain a Audit Service system running on the Community Edition of
+necessary to obtain an Audit Service system running on the Community Edition of
 Liferay. The project is organized as described in Table 1.
 
 ![Liferay Portal Security Audit - Architecture](https://www.dontesta.it/wp-content/uploads/2018/01/LiferayPortalSecurityAuditArchitecture_v1.0.0.png)
@@ -58,7 +57,7 @@ $ ./gradlew clean deploy
 $ cp ../bundles/osgi/modules/*.jar $LIFERAY_HOME/deploy/
 ```
 
-In the my case $LIFERAY_HOME is set on this directory 
+In the case $LIFERAY_HOME is set on this directory 
 /Users/antoniomusarra/dev/liferay/liferay-ce-portal-7.2.1-ga2
 
 Verify the correct deployment of the two bundles via the Liferay log file or
@@ -67,7 +66,14 @@ Active.
 
 From Liferay version 7.1 GA1 access to the GogoShell via telnet has been disabled. 
 To re-enable access, you need to set the portal in developer mode. Form more info
-read this [setting developer mode for your server using portal-developer.properties](https://dev.liferay.com/en/develop/tutorials/-/knowledge_base/7-1/using-developer-mode-with-themes#setting-developer-mode-for-your-server-using-portal-developer-properties)
+read this [setting developer mode for your server using portal-developer.properties](https://help.liferay.com/hc/en-us/articles/360018162091-Using-Developer-Mode-with-Themes)
+
+You can use Docker to run a Liferay 7.4 GA85 instance and deploy the bundles.
+Using the following Docker command:
+
+```
+$ docker run -it -m 8g -p 8080:8080 -p 11311:11311 -v $(pwd):/mnt/liferay liferay/portal:7.4.3.85-ga85
+```
 
 ```
 $ telnet localhost 11311
@@ -75,21 +81,21 @@ $ telnet localhost 11311
 g! lb Audit
 START LEVEL 20
    ID|State      |Level|Name
-  940|Active     |   10|Liferay CE Foundation - Liferay CE Portal Security Audit - API (1.0.0)|1.0.0
-  941|Active     |   10|Liferay Portal Security Audit API (5.0.9)|5.0.9
-  942|Active     |   10|Liferay Portal Security Audit Event Generators API (4.0.6)|4.0.6
-  943|Active     |   10|Liferay Portal Security Audit Storage API (5.2.7)|5.2.7
-  944|Active     |   10|Liferay CE Foundation - Liferay CE Portal Security Audit - Impl (1.0.0)|1.0.0
-  945|Active     |   10|Liferay Portal Security Audit Event Generators User Management (4.0.7)|4.0.7
-  946|Active     |   10|Liferay Portal Security Audit Implementation (3.0.6)|3.0.6
-  947|Active     |   10|Liferay Portal Security Audit Router (5.0.11)|5.0.11
-  948|Active     |   10|Liferay Portal Security Audit Storage Service (5.0.17)|5.0.17
-  949|Active     |   10|Liferay Portal Security Audit Wiring (5.0.5)|5.0.5
- 1386|Active     |   15|Liferay Portal Security Audit Capture Events (1.1.1.SNAPSHOT)|1.1.1.SNAPSHOT
- 1387|Active     |   15|Liferay Portal Security Audit Message Processor (1.2.1.SNAPSHOT)|1.2.1.SNAPSHOT
+ 1113|Active     |   10|Liferay CE Foundation - Liferay CE Portal Security Audit - API (1.0.0)|1.0.0
+ 1114|Active     |   10|Liferay Portal Security Audit API (8.0.0)|8.0.0
+ 1115|Active     |   10|Liferay Portal Security Audit Event Generators API (6.2.0)|6.2.0
+ 1116|Active     |   10|Liferay Portal Security Audit Storage API (8.0.0)|8.0.0
+ 1204|Active     |   10|Liferay CE Foundation - Liferay CE Portal Security Audit - Impl (1.0.0)|1.0.0
+ 1205|Active     |   10|Liferay Portal Security Audit Event Generators User Management (5.0.11)|5.0.11
+ 1206|Active     |   10|Liferay Portal Security Audit Implementation (4.0.7)|4.0.7
+ 1207|Active     |   10|Liferay Portal Security Audit Router (6.0.19)|6.0.19
+ 1208|Active     |   10|Liferay Portal Security Audit Storage Service (6.0.37)|6.0.37
+ 1209|Active     |   10|Liferay Portal Security Audit Wiring (6.0.21)|6.0.21
+ 1609|Active     |   10|Liferay Portal Security Audit Capture Events (1.2.0.SNAPSHOT)|1.2.0.SNAPSHOT
+ 1610|Active     |   10|Liferay Portal Security Audit Message Processor (1.3.0.SNAPSHOT)|1.3.0.SNAPSHOT
 ```
 
-As you can see, version 7.2 of Liferay has introduced several more bundles about 
+As you can see, since version 7.2 of Liferay has introduced several more bundles about 
 the audit framework. One of the most important bundles is the one implements 
 the Audit Router.
 
