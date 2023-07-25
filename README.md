@@ -183,7 +183,7 @@ Thanks to SonarQube Team for free analysis solution for open source projects.
 ## License
 MIT License
 
-Copyright 2009-2021 Antonio Musarra's Blog - https://www.dontesta.it
+Copyright 2009-2023 Antonio Musarra's Blog - https://www.dontesta.it
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
