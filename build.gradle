@@ -1,16 +1,12 @@
 buildscript {
     dependencies {
-        classpath group: "com.gradle", name: "build-scan-plugin",
-                version: "1.16"
         classpath group: "com.liferay", name: "com.liferay.gradle.plugins",
-                version: "4.4.34"
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
+                version: "14.0.158"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.2.1.3168"
     }
 
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        mavenCentral()
         maven {
             url "https://repository-cdn.liferay.com/nexus/content/groups/public"
         }
@@ -58,15 +54,12 @@ subprojects {
     }
 }
 
-apply plugin: "com.gradle.build-scan"
 apply plugin: "org.sonarqube"
 
-buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = "yes"
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10'
-    jarFile = "${project.projectDir}/gradle/wrapper/gradle-wrapper.jar"
+sonar {
+    properties {
+        property "sonar.projectKey", "amusarra_liferay-portal-security-audit"
+        property "sonar.organization", "amusarra-github"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
