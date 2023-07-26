@@ -13,7 +13,7 @@ Later, in the article we also discussed how to implement the OSGi components
 necessary to obtain an Audit Service system running on the Community Edition of
 Liferay. The project is organized as described in Table 1.
 
-![Liferay Portal Security Audit - Architecture](https://www.dontesta.it/wp-content/uploads/2018/01/LiferayPortalSecurityAuditArchitecture_v1.0.0.png)
+![Liferay Portal Security Audit - Architecture](docs/images/macro_architecture_of_liferay_portal_security_audit.jpg)
 
 Figure 1. Macro Architecture of Liferay Portal Security Audit
 
@@ -29,7 +29,7 @@ Version 7.1 of Liferay has *introduced the implementation of a default router*,
 for this reason in this version of the project there is no longer the bundle
 **portal-security-audit-router**.
 
-The module **portal-security-audit-capture-events** contains the follow OSGi components for capture this events:
+The module **portal-security-audit-capture-events** contains the follow OSGi components for capture these events:
 1. Login Failure
 2. Login Post Action
 3. Logout Post Action
@@ -39,6 +39,7 @@ The module **portal-security-message-processor** contains the follow OSGi compon
 2. Login Failure Message Processor
 3. Cloud AMQP Audit Message Processor
 4. Syslog Audit Message Processor (from version 1.3.0)
+5. Slack Audit Message Processor (from version 1.4.0)
 
 For more information about the *Cloud AMQP Audit Message Processor* I advise you to read
 [CloudAMQP Audit Message Processor for Liferay 7/DXP](https://dzone.com/articles/liferay-7-cloud-amqp-audit-message-processor)
@@ -56,12 +57,13 @@ $ cd liferay-portal-security-audit
 $ ./gradlew clean deploy
 $ cp ../bundles/osgi/modules/*.jar $LIFERAY_HOME/deploy/
 ```
+Console 1 - Steps to obtain and install the modules
 
-In the case $LIFERAY_HOME is set on this directory 
-/Users/antoniomusarra/dev/liferay/liferay-ce-portal-7.2.1-ga2
+In the case `$LIFERAY_HOME` is set on this directory 
+`/Users/amusarra/dev/liferay/liferay-ce-portal-7.2.1-ga2`
 
 Verify the correct deployment of the two bundles via the Liferay log file or
-through the Gogo Shell using the lb command, making sure that the status is
+through the Gogo Shell using the `lb` command, making sure that the status is
 Active.
 
 From Liferay version 7.1 GA1 access to the GogoShell via telnet has been disabled. 
@@ -69,11 +71,13 @@ To re-enable access, you need to set the portal in developer mode. Form more inf
 read this [setting developer mode for your server using portal-developer.properties](https://help.liferay.com/hc/en-us/articles/360018162091-Using-Developer-Mode-with-Themes)
 
 You can use Docker to run a Liferay 7.4 GA85 instance and deploy the bundles.
-Using the following Docker command:
+Using the following Docker command. Form more information about Liferay Docker,
+read this [Starting with a Docker Image](https://learn.liferay.com/w/dxp/getting-started/starting-with-a-docker-image?p_l_back_url=%2Fsearch%3Fq%3DDocker&highlight=Docker)
 
 ```
 $ docker run -it -m 8g -p 8080:8080 -p 11311:11311 -v $(pwd):/mnt/liferay liferay/portal:7.4.3.85-ga85
 ```
+Console 2 - Run Liferay 7.4 GA85 as container
 
 ```
 $ telnet localhost 11311
@@ -94,6 +98,7 @@ START LEVEL 20
  1609|Active     |   10|Liferay Portal Security Audit Capture Events (1.2.0.SNAPSHOT)|1.2.0.SNAPSHOT
  1610|Active     |   10|Liferay Portal Security Audit Message Processor (1.3.0.SNAPSHOT)|1.3.0.SNAPSHOT
 ```
+Console 3 - Verify the correct deployment of the two bundles via the Gogo Shell
 
 As you can see, since version 7.2 of Liferay has introduced several more bundles about 
 the audit framework. One of the most important bundles is the one implements 
@@ -102,29 +107,36 @@ the Audit Router.
 After installing the two bundles, you can access the configuration via the
 Liferay control panel.
 
-![Liferay Portal Security Audit - Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_1.png)
+![Liferay Portal Security Audit - Configuration](docs/images/osgi_configuration_audit.png)
 
 Figure 1. OSGi Configuration of the Audit bundles.
 
-![Liferay Portal Security Audit - Audit Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_2.png)
+![Liferay Portal Security Audit - Audit Configuration](docs/images/osgi_configuration_custom_message_audit_processor.jpg)
 
 Figure 2. General Audit Configuration and configuration for the custom Audit Message Processor.
 
-![Liferay Portal Security Audit - Dummy Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_3.png)
+![Liferay Portal Security Audit - Dummy Message Processor Configuration](docs/images/osgi_configuration_dummy_message_audit_processor.png)
 
 Figure 3. OSGi Configuration of the Dummy Message Audit Processor.
 
-![Liferay Portal Security Audit - Login Failure Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_4.png)
+![Liferay Portal Security Audit - Login Failure Message Processor Configuration](docs/images/osgi_configuration_login_message_audit_processor.png)
 
 Figure 4. OSGi Configuration of the Login Failure Message Audit Processor.
 
-![Liferay Portal Security Audit - CloudAMQP Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2018/09/LiferayPortalSecurityAudit_Configuration_5.png)
+![Liferay Portal Security Audit - CloudAMQP Message Processor Configuration](docs/images/osgi_configuration_cloud_amqp_message_audit_processor.png)
 
 Figure 5. OSGi Configuration of the CloudAMQP Message Audit Processor.
 
-![Liferay Portal Security Audit - Syslog Message Processor Configuration](https://www.dontesta.it/wp-content/uploads/2020/09/LiferayPortalSecurityAudit_Configuration_6.png)
+![Liferay Portal Security Audit - Syslog Message Processor Configuration](docs/images/osgi_configuration_syslog_message_audit_processor.png)
 
 Figure 6. OSGi Configuration of the Syslog Message Audit Processor.
+
+![Liferay Portal Security Audit - Slack Message Processor Configuration](docs/images/osgi_configuration_slack_message_audit_processor.jpg)
+
+Figure 7. OSGi Configuration of the Slack Message Audit Processor.
+
+The Slack Audit Message Processor use the [Slack Web API](https://api.slack.com/web) to send messages 
+to Slack using the [Incoming Webhooks](https://api.slack.com/messaging/webhooks) feature.
 
 If you enable Audit, then the two message processors and finally the Scheduler
 Helper Engine, on Liferay log files, you will see the audit messages (of the
@@ -169,9 +181,13 @@ Sep  4 13:38:38 192.168.1.7 myLiferayInstance {"classPK":"35501","companyId":"20
 Log 4. Entry on the remote syslog server with two different message format. 
 
 
-![Liferay PortalSecurity Audit - Login Failure Audit Message Processor Email Report](https://www.dontesta.it/wp-content/uploads/2018/01/LiferayPortalSecurityAuditConfiguration_4.png)
+![Liferay Portal Security Audit - Login Failure Audit Message Processor Email Report](docs/images/email_login_failure.png)
 
-Figure 6. Email send by Login Failure Audit Message Processor
+Figure 8. Email send by Login Failure Audit Message Processor
+
+![Liferay Portal Security Audit - Login Failure Audit Message Processor Slack Message](docs/images/audit_message_on_slack.jpg)
+
+Figure 9. Login Failure Audit Message Processor Slack Message
 
 ## Team Tools
 

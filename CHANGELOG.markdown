@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.4.0] - 2023-07-25
 ### Added
 - Added support for Liferay 7.4 GA85
+- Added new Slack Audit Message Processor
 
 ## [1.3.1] - 2020-09-04
 ### Added
