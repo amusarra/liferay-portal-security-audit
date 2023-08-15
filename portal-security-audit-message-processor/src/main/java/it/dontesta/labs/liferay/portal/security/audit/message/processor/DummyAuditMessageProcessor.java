@@ -24,12 +24,14 @@ import com.liferay.portal.kernel.audit.AuditMessage;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.security.audit.AuditMessageProcessor;
+
 import it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.DummyAuditMessageProcessorConfiguration;
+
+import java.util.Map;
+
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
-
-import java.util.Map;
 
 /**
  * @author Antonio Musarra
@@ -63,7 +65,7 @@ public class DummyAuditMessageProcessor implements AuditMessageProcessor {
 		if (_dummyAuditMessageProcessorConfiguration.enabled()) {
 			_log.info(
 				"Dummy processor processing this Audit Message => " +
-				auditMessage.toJSONObject());
+					auditMessage.toJSONObject());
 		}
 	}
 

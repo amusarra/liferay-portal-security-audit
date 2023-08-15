@@ -12,11 +12,11 @@ Import-Package:\
 	\
 	io.micrometer.core.instrument;resolution:=optional,\
 	\
+	org.apache.avalon.framework.logger;resolution:=optional,\
+	org.apache.log;resolution:=optional,\
+	\
 	org.slf4j.impl;resolution:=optional,\
 	\
-    org.apache.avalon.framework.logger;resolution:=optional,\
-	\
-    org.apache.log;resolution:=optional,\
 	*
 Liferay-Releng-Module-Group-Description: Liferay Portal Security Audit
 Liferay-Releng-Module-Group-Title: Audit

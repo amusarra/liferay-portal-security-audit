@@ -27,18 +27,22 @@ import com.cloudbees.syslog.Severity;
 import com.cloudbees.syslog.sender.AbstractSyslogMessageSender;
 import com.cloudbees.syslog.sender.TcpSyslogMessageSender;
 import com.cloudbees.syslog.sender.UdpSyslogMessageSender;
+
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.audit.AuditMessage;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.security.audit.AuditMessageProcessor;
+
 import it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.SysLogAuditMessageProcessorConfiguration;
+
+import java.io.IOException;
+
+import java.util.Map;
+
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * @author Antonio Musarra
@@ -90,21 +94,26 @@ public class SysLogAuditMessageProcessor implements AuditMessageProcessor {
 			messageSender.setSyslogServerPort(
 				_sysLogAuditMessageProcessorConfiguration.port());
 
-			if (MessageFormat.RFC_3164.name().equals(
-					_sysLogAuditMessageProcessorConfiguration.
-						messageFormat())) {
+			if (MessageFormat.RFC_3164.name(
+				).equals(
+					_sysLogAuditMessageProcessorConfiguration.messageFormat()
+				)) {
 
 				messageSender.setMessageFormat(MessageFormat.RFC_3164);
 			}
-			else if (MessageFormat.RFC_5424.name().equals(
+			else if (MessageFormat.RFC_5424.name(
+					).equals(
 						_sysLogAuditMessageProcessorConfiguration.
-							messageFormat())) {
+							messageFormat()
+					)) {
 
 				messageSender.setMessageFormat(MessageFormat.RFC_5424);
 			}
-			else if (MessageFormat.RFC_5425.name().equals(
+			else if (MessageFormat.RFC_5425.name(
+					).equals(
 						_sysLogAuditMessageProcessorConfiguration.
-							messageFormat())) {
+							messageFormat()
+					)) {
 
 				messageSender.setMessageFormat(MessageFormat.RFC_5425);
 			}
@@ -112,7 +121,8 @@ public class SysLogAuditMessageProcessor implements AuditMessageProcessor {
 			if (_sysLogAuditMessageProcessorConfiguration.enableSSL() &&
 				"TCP".equals(
 					_sysLogAuditMessageProcessorConfiguration.protocol())) {
-				((TcpSyslogMessageSender) messageSender).setSsl(true);
+
+				((TcpSyslogMessageSender)messageSender).setSsl(true);
 			}
 
 			try {

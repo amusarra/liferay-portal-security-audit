@@ -20,6 +20,7 @@
 package it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration;
 
 import aQute.bnd.annotation.metatype.Meta;
+
 import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
 
 /**
@@ -48,48 +49,51 @@ public interface WebHookAuditMessageProcessorConfiguration {
 	public String endPointUrl();
 
 	@Meta.AD(
-			deflt = "60000", description = "webhook-client-connection-timeout-description",
-			name = "webhook-client-connection-timeout-name", required = false
+		deflt = "60000",
+		description = "webhook-client-connection-timeout-description",
+		name = "webhook-client-connection-timeout-name", required = false
 	)
 	public int clientConnectionTimeOut();
 
 	@Meta.AD(
-			deflt = "60000", description = "webhook-client-receive-timeout-description",
-			name = "webhook-client-receive-timeout-name", required = false
+		deflt = "60000",
+		description = "webhook-client-receive-timeout-description",
+		name = "webhook-client-receive-timeout-name", required = false
 	)
 	public int clientReceiveTimeout();
 
 	@Meta.AD(
-			deflt = "", description = "webhook-api-key-description",
-			name = "webhook-api-key-name", required = false,
-			type = Meta.Type.Password
+		deflt = "", description = "webhook-api-key-description",
+		name = "webhook-api-key-name", required = false,
+		type = Meta.Type.Password
 	)
 	public String apiKey();
 
 	@Meta.AD(
-			deflt = API_KEY_LOCATION_HEADER, description = "webhook-api-key-location-description",
-			name = "webhook-api-key-location-name",
-			optionLabels = {
-					"HTTP Header",
-					"HTTP URL Query Parameter"
-			},
-			optionValues = {API_KEY_LOCATION_HEADER, API_KEY_LOCATION_URL_QUERY}, required = false
+		deflt = API_KEY_LOCATION_HEADER,
+		description = "webhook-api-key-location-description",
+		name = "webhook-api-key-location-name",
+		optionLabels = {"HTTP Header", "HTTP URL Query Parameter"},
+		optionValues = {API_KEY_LOCATION_HEADER, API_KEY_LOCATION_URL_QUERY},
+		required = false
 	)
 	public String apiKeyLocationType();
 
 	@Meta.AD(
-			deflt = "", description = "webhook-api-key-location-header-name-description",
-			name = "webhook-api-key-location-header-name-name",
-			required = false
+		deflt = "",
+		description = "webhook-api-key-location-header-name-description",
+		name = "webhook-api-key-location-header-name-name", required = false
 	)
 	public String apiKeyLocationHeaderName();
 
 	@Meta.AD(
-			deflt = "", description = "webhook-api-key-location-query-description",
-			name = "webhook-api-key-location-query-name", required = false
+		deflt = "", description = "webhook-api-key-location-query-description",
+		name = "webhook-api-key-location-query-name", required = false
 	)
 	public String apiKeyQueryParam();
 
 	public String API_KEY_LOCATION_HEADER = "header";
+
 	public String API_KEY_LOCATION_URL_QUERY = "urlQuery";
+
 }

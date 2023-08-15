@@ -28,16 +28,22 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.audit.AuditMessageProcessor;
+
 import it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.WebHookAuditMessageProcessorConfiguration;
+
 import java.io.IOException;
+
 import java.util.Map;
+
 import javax.ws.rs.core.Response;
+
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
@@ -46,132 +52,156 @@ import org.osgi.service.component.annotations.Modified;
  * @author Antonio Musarra
  */
 @Component(
-    configurationPid =
-        "it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.WebHookAuditMessageProcessorConfiguration",
-    immediate = true,
-    property = "eventTypes=" + StringPool.STAR,
-    service = AuditMessageProcessor.class)
+	configurationPid = "it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.WebHookAuditMessageProcessorConfiguration",
+	immediate = true, property = "eventTypes=" + StringPool.STAR,
+	service = AuditMessageProcessor.class
+)
 public class WebHookAuditMessageProcessor implements AuditMessageProcessor {
 
-  @Override
-  public void process(AuditMessage auditMessage) {
-    try {
-      doProcess(auditMessage);
-    } catch (Exception e) {
-      _log.fatal("Unable to process audit message " + auditMessage, e);
-    }
-  }
+	@Override
+	public void process(AuditMessage auditMessage) {
+		try {
+			doProcess(auditMessage);
+		}
+		catch (Exception e) {
+			_log.fatal("Unable to process audit message " + auditMessage, e);
+		}
+	}
 
-  @Activate
-  @Modified
-  protected void activate(Map<String, Object> properties) {
-    _webHookAuditMessageProcessorConfiguration =
-        ConfigurableUtil.createConfigurable(
-            WebHookAuditMessageProcessorConfiguration.class, properties);
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_webHookAuditMessageProcessorConfiguration =
+			ConfigurableUtil.createConfigurable(
+				WebHookAuditMessageProcessorConfiguration.class, properties);
 
-    if (_log.isInfoEnabled()) {
-      _log.info(
-          "Web Hook Audit Message Processor enabled: "
-              + _webHookAuditMessageProcessorConfiguration.enabled());
-    }
-  }
+		if (_log.isInfoEnabled()) {
+			_log.info(
+				"Web Hook Audit Message Processor enabled: " +
+					_webHookAuditMessageProcessorConfiguration.enabled());
+		}
+	}
 
-  protected void doProcess(AuditMessage auditMessage) throws IOException {
+	protected void doProcess(AuditMessage auditMessage) throws IOException {
+		if (_webHookAuditMessageProcessorConfiguration.enabled()) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"WebHook Audit Message processor processing " +
+						"this Audit Message => " + auditMessage.toJSONObject());
+			}
 
-    if (_webHookAuditMessageProcessorConfiguration.enabled()) {
-      if (_log.isDebugEnabled()) {
-        _log.debug(
-            "WebHook Audit Message processor processing "
-                + "this Audit Message => "
-                + auditMessage.toJSONObject());
-      }
+			RequestConfig requestConfig = RequestConfig.custom(
+			).setConnectTimeout(
+				_getClientConnectionTimeOut()
+			).setSocketTimeout(
+				_getClientReceiveTimeout()
+			).build();
 
-      RequestConfig requestConfig =
-          RequestConfig.custom()
-              .setConnectTimeout(_getClientConnectionTimeOut())
-              .setSocketTimeout(_getClientReceiveTimeout())
-              .build();
+			try (CloseableHttpClient httpClient = HttpClients.custom(
+				).setDefaultRequestConfig(
+					requestConfig
+				).build()) {
 
-      try (CloseableHttpClient httpClient =
-          HttpClients.custom().setDefaultRequestConfig(requestConfig).build()) {
+				HttpPost httpPost = new HttpPost(_getEndPointUrl());
 
-        HttpPost httpPost = new HttpPost(_getEndPointUrl());
+				if (Validator.isNotNull(_getApiKey()) &&
+					_getApiKeyLocationType().equals(
+						WebHookAuditMessageProcessorConfiguration.
+							API_KEY_LOCATION_HEADER)) {
 
-        if (Validator.isNotNull(_getApiKey())
-            && _getApiKeyLocationType()
-                .equals(WebHookAuditMessageProcessorConfiguration.API_KEY_LOCATION_HEADER)) {
+					httpPost.setHeader(
+						_getApiKeyLocationHeaderName(), _getApiKey());
+				}
 
-          httpPost.setHeader(_getApiKeyLocationHeaderName(), _getApiKey());
-        }
+				if (Validator.isNotNull(_getApiKey()) &&
+					_getApiKeyLocationType().equals(
+						WebHookAuditMessageProcessorConfiguration.
+							API_KEY_LOCATION_URL_QUERY)) {
 
-        if (Validator.isNotNull(_getApiKey())
-            && _getApiKeyLocationType()
-                .equals(WebHookAuditMessageProcessorConfiguration.API_KEY_LOCATION_URL_QUERY)) {
+					httpPost.setURI(
+						httpPost.getURI(
+						).resolve(
+							String.format(
+								"?%s=%s", _getApiKeyQueryParam(), _getApiKey())
+						));
+				}
 
-          httpPost.setURI(
-              httpPost
-                  .getURI()
-                  .resolve(String.format("?%s=%s", _getApiKeyQueryParam(), _getApiKey())));
-        }
+				StringEntity entity = new StringEntity(
+					auditMessage.toJSONObject(
+					).toJSONString());
 
-        StringEntity entity = new StringEntity(auditMessage.toJSONObject().toJSONString());
-        entity.setContentType("application/json");
-        httpPost.setEntity(entity);
+				entity.setContentType("application/json");
+				httpPost.setEntity(entity);
 
-        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-          int statusCode = response.getStatusLine().getStatusCode();
+				try (CloseableHttpResponse response = httpClient.execute(
+						httpPost)) {
 
-          if (statusCode != Response.Status.OK.getStatusCode()) {
-            _log.error(
-                String.format(
-                    "Error on send Audit Message to Slack: {response code: %s, response content: %s}",
-                    statusCode, response.getEntity().getContent()));
-          }
+					int statusCode = response.getStatusLine(
+					).getStatusCode();
 
-          if (_log.isDebugEnabled()) {
-            _log.debug(
-                String.format(
-                    "Audit Message sent to Slack: {response code: %s, response content: %s}",
-                    statusCode, response.getEntity().getContent()));
-          }
-        } catch (IOException ioException) {
-          throw ioException;
-        }
-      } catch (IOException ioException) {
-        throw ioException;
-      }
-    }
-  }
+					if (statusCode != Response.Status.OK.getStatusCode()) {
+						_log.error(
+							String.format(
+								"Error on send Audit Message to Slack: {response code: %s, response content: %s}",
+								statusCode,
+								response.getEntity(
+								).getContent()));
+					}
 
-  private String _getApiKey() {
-    return _webHookAuditMessageProcessorConfiguration.apiKey();
-  }
+					if (_log.isDebugEnabled()) {
+						_log.debug(
+							String.format(
+								"Audit Message sent to Slack: {response code: %s, response content: %s}",
+								statusCode,
+								response.getEntity(
+								).getContent()));
+					}
+				}
+				catch (IOException ioException) {
+					throw ioException;
+				}
+			}
+			catch (IOException ioException) {
+				throw ioException;
+			}
+		}
+	}
 
-  private String _getApiKeyLocationType() {
-    return _webHookAuditMessageProcessorConfiguration.apiKeyLocationType();
-  }
+	private String _getApiKey() {
+		return _webHookAuditMessageProcessorConfiguration.apiKey();
+	}
 
-  private String _getApiKeyLocationHeaderName() {
-    return _webHookAuditMessageProcessorConfiguration.apiKeyLocationHeaderName();
-  }
+	private String _getApiKeyLocationHeaderName() {
+		return _webHookAuditMessageProcessorConfiguration.
+			apiKeyLocationHeaderName();
+	}
 
-  private String _getApiKeyQueryParam() {
-    return _webHookAuditMessageProcessorConfiguration.apiKeyQueryParam();
-  }
+	private String _getApiKeyLocationType() {
+		return _webHookAuditMessageProcessorConfiguration.apiKeyLocationType();
+	}
 
-  private int _getClientConnectionTimeOut() {
-    return _webHookAuditMessageProcessorConfiguration.clientConnectionTimeOut();
-  }
+	private String _getApiKeyQueryParam() {
+		return _webHookAuditMessageProcessorConfiguration.apiKeyQueryParam();
+	}
 
-  private int _getClientReceiveTimeout() {
-    return _webHookAuditMessageProcessorConfiguration.clientReceiveTimeout();
-  }
+	private int _getClientConnectionTimeOut() {
+		return _webHookAuditMessageProcessorConfiguration.
+			clientConnectionTimeOut();
+	}
 
-  private String _getEndPointUrl() {
-    return _webHookAuditMessageProcessorConfiguration.endPointUrl();
-  }
+	private int _getClientReceiveTimeout() {
+		return _webHookAuditMessageProcessorConfiguration.
+			clientReceiveTimeout();
+	}
 
-  private static final Log _log = LogFactoryUtil.getLog(WebHookAuditMessageProcessor.class);
+	private String _getEndPointUrl() {
+		return _webHookAuditMessageProcessorConfiguration.endPointUrl();
+	}
 
-  private WebHookAuditMessageProcessorConfiguration _webHookAuditMessageProcessorConfiguration;
+	private static final Log _log = LogFactoryUtil.getLog(
+		WebHookAuditMessageProcessor.class);
+
+	private WebHookAuditMessageProcessorConfiguration
+		_webHookAuditMessageProcessorConfiguration;
+
 }
