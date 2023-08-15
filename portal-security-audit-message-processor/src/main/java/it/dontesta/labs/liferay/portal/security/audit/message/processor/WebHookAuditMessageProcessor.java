@@ -71,7 +71,7 @@ public class WebHookAuditMessageProcessor implements AuditMessageProcessor {
 
     if (_log.isInfoEnabled()) {
       _log.info(
-          "Cloud AMQP Audit Message Processor enabled: "
+          "Web Hook Audit Message Processor enabled: "
               + _webHookAuditMessageProcessorConfiguration.enabled());
     }
   }
@@ -92,37 +92,33 @@ public class WebHookAuditMessageProcessor implements AuditMessageProcessor {
               .setSocketTimeout(_getClientReceiveTimeout())
               .build();
 
-      // Create HTTP client
       try (CloseableHttpClient httpClient =
           HttpClients.custom().setDefaultRequestConfig(requestConfig).build()) {
-        // Create HTTP POST request
+
         HttpPost httpPost = new HttpPost(_getEndPointUrl());
 
-        if (_getApiKeyLocationType()
-                .equals(_webHookAuditMessageProcessorConfiguration.API_KEY_LOCATION_HEADER)
-            && Validator.isNotNull(_getApiKey())) {
-          httpPost.setHeader(_getApiKeyLocationName(), _getApiKey());
-          _log.info("Setting API Key in HTTP Header");
+        if (Validator.isNotNull(_getApiKey())
+            && _getApiKeyLocationType()
+                .equals(WebHookAuditMessageProcessorConfiguration.API_KEY_LOCATION_HEADER)) {
+
+          httpPost.setHeader(_getApiKeyLocationHeaderName(), _getApiKey());
         }
 
-        if (_getApiKeyLocationType()
-                .equals(_webHookAuditMessageProcessorConfiguration.API_KEY_LOCATION_URL_QUERY)
-            && Validator.isNotNull(_getApiKey())) {
+        if (Validator.isNotNull(_getApiKey())
+            && _getApiKeyLocationType()
+                .equals(WebHookAuditMessageProcessorConfiguration.API_KEY_LOCATION_URL_QUERY)) {
+
           httpPost.setURI(
               httpPost
                   .getURI()
-                  .resolve(String.format("?%s=%s", _getApiKeyLocationName(), _getApiKey())));
-          _log.info("Setting API Key in HTTP URL Query Parameter");
+                  .resolve(String.format("?%s=%s", _getApiKeyQueryParam(), _getApiKey())));
         }
 
-        // Set JSON content
         StringEntity entity = new StringEntity(auditMessage.toJSONObject().toJSONString());
         entity.setContentType("application/json");
         httpPost.setEntity(entity);
 
-        // Execute the request
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-          // Process the response
           int statusCode = response.getStatusLine().getStatusCode();
 
           if (statusCode != Response.Status.OK.getStatusCode()) {
@@ -132,7 +128,12 @@ public class WebHookAuditMessageProcessor implements AuditMessageProcessor {
                     statusCode, response.getEntity().getContent()));
           }
 
-          // You can also handle the response content here if needed
+          if (_log.isDebugEnabled()) {
+            _log.debug(
+                String.format(
+                    "Audit Message sent to Slack: {response code: %s, response content: %s}",
+                    statusCode, response.getEntity().getContent()));
+          }
         } catch (IOException ioException) {
           throw ioException;
         }
@@ -143,22 +144,19 @@ public class WebHookAuditMessageProcessor implements AuditMessageProcessor {
   }
 
   private String _getApiKey() {
-    _log.info("API Key => " + _webHookAuditMessageProcessorConfiguration.apiKey());
     return _webHookAuditMessageProcessorConfiguration.apiKey();
   }
 
   private String _getApiKeyLocationType() {
-    _log.info(
-        "API Key Location Type => "
-            + _webHookAuditMessageProcessorConfiguration.apiKeyLocationType());
     return _webHookAuditMessageProcessorConfiguration.apiKeyLocationType();
   }
 
-  private String _getApiKeyLocationName() {
-    _log.info(
-        "API Key Location Name => "
-            + _webHookAuditMessageProcessorConfiguration.apiKeyLocationName());
-    return _webHookAuditMessageProcessorConfiguration.apiKeyLocationName();
+  private String _getApiKeyLocationHeaderName() {
+    return _webHookAuditMessageProcessorConfiguration.apiKeyLocationHeaderName();
+  }
+
+  private String _getApiKeyQueryParam() {
+    return _webHookAuditMessageProcessorConfiguration.apiKeyQueryParam();
   }
 
   private int _getClientConnectionTimeOut() {

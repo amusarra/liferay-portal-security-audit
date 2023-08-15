@@ -41,8 +41,8 @@ public interface WebHookAuditMessageProcessorConfiguration {
 
 	@Meta.AD(
 		deflt = "https://webhook.site/audit/message/processor",
-		description = "webhook-audit-message-processor-endpoint-url-help",
-		name = "webhook-audit-message-processor-endpoint-url",
+		description = "webhook-audit-message-processor-endpoint-url-description",
+		name = "webhook-audit-message-processor-endpoint-url-name",
 		required = false
 	)
 	public String endPointUrl();
@@ -78,17 +78,17 @@ public interface WebHookAuditMessageProcessorConfiguration {
 	public String apiKeyLocationType();
 
 	@Meta.AD(
-			deflt = "", description = "webhook-api-key-location-name-description",
-			name = "webhook-api-key-location-name-name",
+			deflt = "", description = "webhook-api-key-location-header-name-description",
+			name = "webhook-api-key-location-header-name-name",
 			required = false
 	)
-	public String apiKeyLocationName();
+	public String apiKeyLocationHeaderName();
 
 	@Meta.AD(
-			deflt = "", description = "webhook-api-key-param-description",
-			name = "webhook-api-key-param-name", required = false
+			deflt = "", description = "webhook-api-key-location-query-description",
+			name = "webhook-api-key-location-query-name", required = false
 	)
-	public String apiKeyParam();
+	public String apiKeyQueryParam();
 
 	public String API_KEY_LOCATION_HEADER = "header";
 	public String API_KEY_LOCATION_URL_QUERY = "urlQuery";
