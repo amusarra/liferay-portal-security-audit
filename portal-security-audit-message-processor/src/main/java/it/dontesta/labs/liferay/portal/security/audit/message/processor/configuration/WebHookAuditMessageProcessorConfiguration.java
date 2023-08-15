@@ -48,88 +48,16 @@ public interface WebHookAuditMessageProcessorConfiguration {
 	public String endPointUrl();
 
 	@Meta.AD(
-			deflt = "true", description = "webhook-common-name-check-description",
-			name = "webhook-common-name-check-name", required = false
-	)
-	public boolean commonNameCheck();
-
-	@Meta.AD(
-			deflt = "true", description = "webhook-hostname-verifier-description",
-			name = "webhook-hostname-verifier-name", required = false
-	)
-	public boolean hostnameVerifier();
-
-	@Meta.AD(
 			deflt = "60000", description = "webhook-client-connection-timeout-description",
 			name = "webhook-client-connection-timeout-name", required = false
 	)
-	public long clientConnectionTimeOut();
+	public int clientConnectionTimeOut();
 
 	@Meta.AD(
 			deflt = "60000", description = "webhook-client-receive-timeout-description",
 			name = "webhook-client-receive-timeout-name", required = false
 	)
-	public long clientReceiveTimeout();
-
-	@Meta.AD(
-			deflt = "PKCS12", description = "webhook-trust-store-description",
-			name = "webhook-trust-store-name",
-			optionLabels = {
-					"JKS (Java Keystore)",
-					"PKCS (Public-Key Cryptography Standards) #12"
-			},
-			optionValues = {"JKS", "PKCS12"}, required = false
-	)
-	public String trustStoreType();
-
-	@Meta.AD(
-			deflt = "PKCS12", description = "webhook-key-store-description",
-			name = "webhook-key-store-name",
-			optionLabels = {
-					"JKS (Java Keystore)",
-					"PKCS (Public-Key Cryptography Standards) #12"
-			},
-			optionValues = {"JKS", "PKCS12"}, required = false
-	)
-	public String keyStoreType();
-
-	@Meta.AD(
-			deflt = "", description = "webhook-trust-store-file-description",
-			name = "webhook-trust-store-file-name", required = false
-	)
-	public String trustStoreFile();
-
-	@Meta.AD(
-			deflt = "", description = "webhook-key-store-file-description",
-			name = "webhook-key-store-file-name", required = false
-	)
-	public String keyStoreFile();
-
-	@Meta.AD(
-			deflt = "", description = "webhook-trust-store-password-description",
-			name = "webhook-trust-store-password-name", required = false,
-			type = Meta.Type.Password
-	)
-	public String trustStorePassword();
-
-	@Meta.AD(
-			deflt = "", description = "webhook-key-store-password-description",
-			name = "webhook-key-store-password-name", required = false,
-			type = Meta.Type.Password
-	)
-	public String keyStorePassword();
-
-	@Meta.AD(
-			deflt = "TLSv1.2", description = "webhook-https-protocol-description",
-			name = "webhook-https-protocol-name",
-			optionLabels = {
-					"Transport Layer Security (TLS) 1.1",
-					"Transport Layer Security (TLS) 1.2",
-					"Transport Layer Security (TLS) 1.3"
-			},
-			optionValues = {"TLSv1.1", "TLSv1.2", "TLSv1.3"}, required = false
-	)
-	public String httpsProtocol();
+	public int clientReceiveTimeout();
 
 	@Meta.AD(
 			deflt = "", description = "webhook-api-key-description",
@@ -139,16 +67,22 @@ public interface WebHookAuditMessageProcessorConfiguration {
 	public String apiKey();
 
 	@Meta.AD(
-			deflt = "header", description = "webhook-api-key-location-description",
+			deflt = API_KEY_LOCATION_HEADER, description = "webhook-api-key-location-description",
 			name = "webhook-api-key-location-name",
 			optionLabels = {
 					"HTTP Header",
-					"HTTP Cookie",
 					"HTTP URL Query Parameter"
 			},
-			optionValues = {"header", "cookie", "urlQuery"}, required = false
+			optionValues = {API_KEY_LOCATION_HEADER, API_KEY_LOCATION_URL_QUERY}, required = false
 	)
-	public String apiKeyLocation();
+	public String apiKeyLocationType();
+
+	@Meta.AD(
+			deflt = "", description = "webhook-api-key-location-name-description",
+			name = "webhook-api-key-location-name-name",
+			required = false
+	)
+	public String apiKeyLocationName();
 
 	@Meta.AD(
 			deflt = "", description = "webhook-api-key-param-description",
@@ -156,16 +90,6 @@ public interface WebHookAuditMessageProcessorConfiguration {
 	)
 	public String apiKeyParam();
 
-	@Meta.AD(
-			deflt = "api-key", description = "webhook-auth-type-description",
-			name = "webhook-auth-type-name",
-			optionLabels = {
-					"None",
-					"HTTP Basic",
-					"HTTPS Mutual Authentication"
-			},
-			optionValues = {"none", "basic", "mutual"}, required = false
-	)
-	public String authType();
-
+	public String API_KEY_LOCATION_HEADER = "header";
+	public String API_KEY_LOCATION_URL_QUERY = "urlQuery";
 }
