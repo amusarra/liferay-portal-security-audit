@@ -9,7 +9,7 @@ dependencies {
 	compileOnly group: "javax.mail", name: "mail", version: "1.4"
 }
 
-version = "1.3.0-SNAPSHOT"
+version = "1.4.0-SNAPSHOT"
 
 jar {
 	bnd ('Bundle-Version': project.version)
