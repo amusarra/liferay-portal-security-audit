@@ -1,4 +1,4 @@
-name: Build, analyze and build Docker image
+name: Build
 on:
         push:
                 branches:
@@ -9,7 +9,7 @@ on:
                 types: [opened, synchronize, reopened]
 jobs:
         build:
-                name: Build and analyze
+                name: Build, analyze, build Docker image and push to Docker Hub
                 runs-on: ubuntu-latest
                 steps:
                         - uses: actions/checkout@v3
@@ -39,3 +39,12 @@ jobs:
                           run: ./gradlew build sonar --info
                         - name: Build the Docker image
                           run: ./gradlew buildDockerImage
+                        - name: Log in to Docker Hub
+                          uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+                          with:
+                            username: ${{ secrets.DOCKER_USERNAME }}
+                            password: ${{ secrets.DOCKER_PASSWORD }}
+                        - name: Change the Docker Tag image
+                          run: docker tag liferay-portal-security-audit-liferay:liferay-portal-security-audit-liferay:7.4.3.85-ga85 ${{ secrets.DOCKER_USERNAME }}/liferay-portal-security-audit-liferay:1.5.0_7.4.3.85-ga85
+                        - name: Push the Docker image
+                          run: docker push ${{ secrets.DOCKER_USERNAME }}/liferay-portal-security-audit-liferay:1.5.0_7.4.3.85-ga85
