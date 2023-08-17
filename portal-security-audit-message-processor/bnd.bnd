@@ -12,6 +12,9 @@ Import-Package:\
 	\
 	io.micrometer.core.instrument;resolution:=optional,\
 	\
+	org.apache.avalon.framework.logger;resolution:=optional,\
+	org.apache.log;resolution:=optional,\
+	\
 	org.slf4j.impl;resolution:=optional,\
 	\
 	*

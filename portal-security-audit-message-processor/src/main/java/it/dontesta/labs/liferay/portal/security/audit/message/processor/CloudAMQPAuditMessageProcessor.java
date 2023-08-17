@@ -96,7 +96,8 @@ public class CloudAMQPAuditMessageProcessor implements AuditMessageProcessor {
 
 			factory.setUri(_buildAMQPURI());
 
-			//Recommended settings
+			// Recommended settings
+
 			factory.setRequestedHeartbeat(30);
 			factory.setConnectionTimeout(30000);
 
@@ -105,13 +106,16 @@ public class CloudAMQPAuditMessageProcessor implements AuditMessageProcessor {
 					_log.debug("Try to connect " + _buildAMQPURI() + "...");
 				}
 
-				//durable - RabbitMQ will never lose the queue if a crash occurs
+				// durable - RabbitMQ will never lose the queue if a crash occurs
+
 				boolean durable = true;
 
-				//exclusive - if queue only will be used by one connection
+				// exclusive - if queue only will be used by one connection
+
 				boolean exclusive = false;
 
-				//autodelete - queue is deleted when last consumer unsubscribes
+				// autodelete - queue is deleted when last consumer unsubscribes
+
 				boolean autoDelete = true;
 
 				try (Channel channel = connection.createChannel()) {

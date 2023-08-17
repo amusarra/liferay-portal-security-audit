@@ -20,6 +20,7 @@
 package it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration;
 
 import aQute.bnd.annotation.metatype.Meta;
+
 import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
 
 /**
@@ -40,9 +41,9 @@ public interface SlackAuditMessageProcessorConfiguration {
 	public boolean enabled();
 
 	@Meta.AD(
-			deflt = "https://hooks.slack.com/services/XXXXXXXXX/XXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXX",
-			description = "slack-audit-message-processor-web-hook-url-help",
-			name = "slack-audit-message-processor-web-hook-url", required = false
+		deflt = "https://hooks.slack.com/services/XXXXXXXXX/XXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXX",
+		description = "slack-audit-message-processor-web-hook-url-help",
+		name = "slack-audit-message-processor-web-hook-url", required = false
 	)
 	public String webHookUrl();
 

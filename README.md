@@ -7,6 +7,7 @@
 This project refers to the ebook [Liferay Portal Security Audit](https://goo.gl/AC8VRo) published by
 [Antonio Musarra's Blog](https://www.dontesta.it) on the Amazon Kindle Store.
 
+## Introduction
 At the beginning of the article the source code of
 Liferay Portal Security Audit (freely available on GitHub) was examined.
 Later, in the article we also discussed how to implement the OSGi components
@@ -40,6 +41,7 @@ The module **portal-security-message-processor** contains the follow OSGi compon
 3. Cloud AMQP Audit Message Processor
 4. Syslog Audit Message Processor (from version 1.3.0)
 5. Slack Audit Message Processor (from version 1.4.0)
+6. Web Hook Audit Message Processor (from version 1.5.0)
 
 For more information about the *Cloud AMQP Audit Message Processor* I advise you to read
 [CloudAMQP Audit Message Processor for Liferay 7/DXP](https://dzone.com/articles/liferay-7-cloud-amqp-audit-message-processor)
@@ -51,16 +53,66 @@ from the framework at the base of the Liferay Portal Security Audit.
 Shows the steps necessary to obtain and install the three modules
 shown in Table 1.
 
+## Quick Start
+Before to start, you need to check these prerequisites:
+1. JDK 11 (for example [AdoptOpenJDK](https://adoptopenjdk.net/) or [Amazon Corretto](https://aws.amazon.com/it/corretto/))
+2. Docker >= 19 (for example [Docker Desktop](https://www.docker.com/products/docker-desktop))
+
+Since version 1.5.0 of the project, you can use quickly using the Docker image
+that contains the Audit bundles already installed. The following command will run the Docker image.
+
+```
+$ docker run -it --rm -m 8g -p 8080:8080 -p 11311:11311 amusarra/liferay-portal-security-audit:1.5.0_7.4.3.85-ga85
+```
+Console 1 - Run the Docker image from pull image from Docker Hub
+
+At the end of the startup of the Liferay instance, you will see the following output on the console
+that show the deployment of the two Audit bundles.
+
+```
+2023-08-17 14:47:13.538 INFO  [main][ModuleFrameworkImpl:281] Navigate to Control Panel > System > Gogo Shell and enter "lb" to see all bundles
+
+    __    ____________________  _____  __
+   / /   /  _/ ____/ ____/ __ \/   \ \/ /
+  / /    / // /_  / __/ / /_/ / /| |\  /
+ / /____/ // __/ / /___/ _, _/ ___ |/ /
+/_____/___/_/   /_____/_/ |_/_/  |_/_/
+
+Starting Liferay Community Edition Portal 7.4.3.85 CE GA85 (Cavanaugh / Build 7403 / July 14, 2023)
+
+2023-08-17 14:47:14.658 INFO  [main][StartupHelperUtil:85] There are no patches installed
+2023-08-17 14:47:14.757 INFO  [main][LoggingTimer:83] Starting com.liferay.portal.events.StartupHelperUtil#initResourceActions
+2023-08-17 14:47:14.777 INFO  [main][LoggingTimer:44] Completed com.liferay.portal.events.StartupHelperUtil#initResourceActions in 20 ms
+2023-08-17 14:47:15.073 INFO  [main][AutoDeployDir:161] Auto deploy scanner started for /opt/liferay/deploy
+...
+17-Aug-2023 14:47:22.227 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [31063] milliseconds
+2023-08-17 14:47:28.079 INFO  [com.liferay.portal.kernel.deploy.auto.AutoDeployScanner][AutoDeployDir:221] Processing it.dontesta.labs.liferay.portal.security.audit.event-1.2.0-SNAPSHOT.jar
+2023-08-17 14:47:28.098 INFO  [com.liferay.portal.kernel.deploy.auto.AutoDeployScanner][AutoDeployDir:221] Processing it.dontesta.labs.liferay.portal.security.audit.message.processor-1.4.0-SNAPSHOT.jar
+2023-08-17 14:47:33.751 INFO  [fileinstall-directory-watcher][BundleStartStopLogger:77] STARTED it.dontesta.labs.liferay.portal.security.audit.event_1.2.0.SNAPSHOT [1609]
+2023-08-17 14:47:33.776 INFO  [fileinstall-directory-watcher][CloudAMQPAuditMessageProcessor:78] Cloud AMQP Audit Message Processor enabled: false
+2023-08-17 14:47:33.782 INFO  [fileinstall-directory-watcher][SlackAuditMessageProcessor:74] Slack Audit Message Processor enabled: false
+2023-08-17 14:47:33.790 INFO  [fileinstall-directory-watcher][WebHookAuditMessageProcessor:79] Web Hook Audit Message Processor enabled: false
+2023-08-17 14:47:33.791 INFO  [fileinstall-directory-watcher][BundleStartStopLogger:77] STARTED it.dontesta.labs.liferay.portal.security.audit.message.processor_1.4.0.SNAPSHOT
+```
+Log 1 - Output of the command `docker run` that show the log of the Liferay instance
+
+
+If you want to use a local instances of Liferay, you need to download the 
+Liferay Portal Community Edition 7.4 GA85 bundle from the [Liferay Portal Community Edition 7.4 GA85](https://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.4.3%20GA5/liferay-ce-portal-tomcat-7.4.3-ga5-20210812065309714.tar.gz/download)
+
+Using the following command to build the project and deploy the bundles on the
+local Liferay instance.
+
 ```
 $ git clone https://github.com/amusarra/liferay-portal-security-audit.git
 $ cd liferay-portal-security-audit
 $ ./gradlew clean deploy
 $ cp ../bundles/osgi/modules/*.jar $LIFERAY_HOME/deploy/
 ```
-Console 1 - Steps to obtain and install the modules
+Console 2 - Steps to obtain and install the modules
 
 In the case `$LIFERAY_HOME` is set on this directory 
-`/Users/amusarra/dev/liferay/liferay-ce-portal-7.2.1-ga2`
+where you have extracted the Liferay Portal Community Edition bundle.
 
 Verify the correct deployment of the two bundles via the Liferay log file or
 through the Gogo Shell using the `lb` command, making sure that the status is
@@ -70,14 +122,68 @@ From Liferay version 7.1 GA1 access to the GogoShell via telnet has been disable
 To re-enable access, you need to set the portal in developer mode. Form more info
 read this [setting developer mode for your server using portal-developer.properties](https://help.liferay.com/hc/en-us/articles/360018162091-Using-Developer-Mode-with-Themes)
 
-You can use Docker to run a Liferay 7.4 GA85 instance and deploy the bundles.
+You can use Docker to run a Liferay instance and deploy the bundles.
+This way you don't need to download the Liferay Portal Community Edition bundle
+and more simply you can run the Liferay instance.
+
 Using the following Docker command. Form more information about Liferay Docker,
 read this [Starting with a Docker Image](https://learn.liferay.com/w/dxp/getting-started/starting-with-a-docker-image?p_l_back_url=%2Fsearch%3Fq%3DDocker&highlight=Docker)
 
 ```
 $ docker run -it -m 8g -p 8080:8080 -p 11311:11311 -v $(pwd):/mnt/liferay liferay/portal:7.4.3.85-ga85
 ```
-Console 2 - Run Liferay 7.4 GA85 as container
+Console 3 - Run Liferay 7.4 GA85 as container
+
+From version 1.5.0 of the project, you can use the Liferay Workspace to build
+the Docker image that contains the Audit bundles. The following command will
+build the Docker image.
+
+```
+$ ./gradlew buildDockerImage
+```
+Console 4 - Build the Docker image
+
+If below the `buildDockerImage` task you see the following output, you can run
+the Docker image.
+
+```
+> Task :buildDockerImage
+Building image using context '/Users/amusarra/dev/github/amusarra/liferay-portal-security-audit/build/docker'.
+Using images 'liferay-portal-security-audit-liferay:7.4.3.85-ga85'.
+Step 1/8 : FROM liferay/portal:7.4.3.85-ga85
+ ---> 8b403b9ef4c4
+Step 2/8 : ENV LIFERAY_WORKSPACE_ENVIRONMENT=local
+ ---> Running in 639f4187ed24
+Removing intermediate container 639f4187ed24
+ ---> c007fb2a701e
+Step 3/8 : COPY --chown=liferay:liferay client-extensions /home/liferay/osgi/client-extensions
+ ---> 1acce10fa8a0
+Step 4/8 : COPY --chown=liferay:liferay deploy /mnt/liferay/deploy
+ ---> e956d29ddcee
+Step 5/8 : COPY --chown=liferay:liferay patching /mnt/liferay/patching
+ ---> 85a90bf0310d
+Step 6/8 : COPY --chown=liferay:liferay scripts /mnt/liferay/scripts
+ ---> e896b7bb77ad
+Step 7/8 : COPY --chown=liferay:liferay configs /home/liferay/configs
+ ---> 26bd12884e6f
+Step 8/8 : COPY --chown=liferay:liferay 100_liferay_image_setup.sh /usr/local/liferay/scripts/pre-configure/100_liferay_image_setup.sh
+ ---> a76d8d6b9db0
+Successfully built a76d8d6b9db0
+Successfully tagged liferay-portal-security-audit-liferay:7.4.3.85-ga85
+Created image with ID 'a76d8d6b9db0'.
+```
+Console 5 - Output of the `buildDockerImage` task
+
+For run the Docker image, you can use the following command.
+
+```
+$ docker run -it --rm -m 8g -p 8080:8080 -p 11311:11311 liferay-portal-security-audit-liferay:7.4.3.85-ga85
+```
+Console 6 - Run the Docker image
+
+Using this Docker image, you can have a Liferay instance with the Audit bundles already installed.
+
+## Configuration of the Audit bundles
 
 ```
 $ telnet localhost 11311
@@ -138,6 +244,18 @@ Figure 7. OSGi Configuration of the Slack Message Audit Processor.
 The Slack Audit Message Processor use the [Slack Web API](https://api.slack.com/web) to send messages 
 to Slack using the [Incoming Webhooks](https://api.slack.com/messaging/webhooks) feature.
 
+![Liferay Portal Security Audit - Web Hook Message Processor Configuration](docs/images/osgi_configuration_webhook_message_audit_processor.jpg)
+
+Figure 8. OSGi Configuration of the Web Hook Message Audit Processor.
+
+For testing the Web Hook Audit Message Processor, you can configure this message processor
+with the [Webhook.site](https://webhook.site/) service. This service allows you to create
+a unique URL to which you can send HTTP requests and view the entire request payload.
+
+![Liferay Portal Security Audit - View Audit Message on Webhook.site](docs/images/webhook_messagge_processor_using_webhooksite_service_1.jpg)
+
+Figure 9. View Audit Message send by Liferay to the Webhook.site service.
+
 If you enable Audit, then the two message processors and finally the Scheduler
 Helper Engine, on Liferay log files, you will see the audit messages (of the
 running jobs, of the login processes, etc.). If you were to fail the login
@@ -188,6 +306,16 @@ Figure 8. Email send by Login Failure Audit Message Processor
 ![Liferay Portal Security Audit - Login Failure Audit Message Processor Slack Message](docs/images/audit_message_on_slack.jpg)
 
 Figure 9. Login Failure Audit Message Processor Slack Message
+
+## Additional Resources
+
+1. [What is a security audit?](https://www.techtarget.com/searchcio/definition/security-audit)
+2. [NIST Security Audit: Definition, Importance and 3 Different Frameworks](https://www.getastra.com/blog/security-audit/nist-security-audit/)
+3. [theRedCode - Docker](https://www.theredcode.it/search/?query=docker)
+4. [Mauro Cicolella - Pillole di Docker](https://www.youtube.com/watch?v=Xea_9GYFpaA&list=PLCbSCJEIR6CpDJw4MawjHlgbsP3IG376e)
+5. [Vincenzo Racca - Docker](https://www.vincenzoracca.com/blog/container/docker/)
+6. [Book (Serena Sensini) - Docker: Sviluppare e rilasciare software tramite container](https://amzn.to/3YHqgSW)
+
 
 ## Team Tools
 

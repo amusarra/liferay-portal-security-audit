@@ -30,10 +30,15 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.security.audit.AuditMessageProcessor;
+
 import it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.SlackAuditMessageProcessorConfiguration;
+
 import java.io.IOException;
+
 import java.util.Map;
+
 import javax.ws.rs.core.Response;
+
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
@@ -42,110 +47,145 @@ import org.osgi.service.component.annotations.Modified;
  * @author Antonio Musarra
  */
 @Component(
-    configurationPid =
-        "it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.SlackAuditMessageProcessorConfiguration",
-    immediate = true,
-    property = "eventTypes=*",
-    service = AuditMessageProcessor.class)
+	configurationPid = "it.dontesta.labs.liferay.portal.security.audit.message.processor.configuration.SlackAuditMessageProcessorConfiguration",
+	immediate = true, property = "eventTypes=*",
+	service = AuditMessageProcessor.class
+)
 public class SlackAuditMessageProcessor implements AuditMessageProcessor {
 
-  @Override
-  public void process(AuditMessage auditMessage) {
-    try {
-      doProcess(auditMessage);
-    } catch (Exception e) {
-      _log.fatal("Unable to process audit message " + auditMessage, e);
-    }
-  }
+	@Override
+	public void process(AuditMessage auditMessage) {
+		try {
+			doProcess(auditMessage);
+		}
+		catch (Exception e) {
+			_log.fatal("Unable to process audit message " + auditMessage, e);
+		}
+	}
 
-  @Activate
-  @Modified
-  protected void activate(Map<String, Object> properties) {
-    _slackAuditMessageProcessorConfiguration =
-        ConfigurableUtil.createConfigurable(
-            SlackAuditMessageProcessorConfiguration.class, properties);
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_slackAuditMessageProcessorConfiguration =
+			ConfigurableUtil.createConfigurable(
+				SlackAuditMessageProcessorConfiguration.class, properties);
 
-    if (_log.isInfoEnabled()) {
-      _log.info(
-          "Slack Audit Message Processor enabled: "
-              + _slackAuditMessageProcessorConfiguration.enabled());
-    }
-  }
+		if (_log.isInfoEnabled()) {
+			_log.info(
+				"Slack Audit Message Processor enabled: " +
+					_slackAuditMessageProcessorConfiguration.enabled());
+		}
+	}
 
-  protected void doProcess(AuditMessage auditMessage) throws JSONException, IOException {
-    if (_slackAuditMessageProcessorConfiguration.enabled()) {
-      _log.info("Slack processor processing this Audit Message => " + auditMessage.toJSONObject());
+	protected void doProcess(AuditMessage auditMessage)
+		throws IOException, JSONException {
 
-      JSONObject jsonObjectSectionHeader = JSONFactoryUtil.createJSONObject();
-      JSONObject jsonObjectSectionBody = JSONFactoryUtil.createJSONObject();
-      JSONObject jsonObjectSectionContext = JSONFactoryUtil.createJSONObject();
-      JSONArray jsonArrayBlocks = JSONFactoryUtil.createJSONArray();
-      JSONArray jsonArrayContext = JSONFactoryUtil.createJSONArray();
+		if (_slackAuditMessageProcessorConfiguration.enabled()) {
+			_log.info(
+				"Slack processor processing this Audit Message => " +
+					auditMessage.toJSONObject());
 
-      jsonObjectSectionHeader.put("type", "section");
-      jsonObjectSectionHeader.put(
-          "text",
-          JSONFactoryUtil.createJSONObject()
-              .put("type", "plain_text")
-              .put(
-                  "text",
-                  String.format(
-                      "Audit Message from: %s%nBelow the Audit Message details.",
-                      SlackAuditMessageProcessor.class.getSimpleName())));
+			JSONObject jsonObjectSectionHeader =
+				JSONFactoryUtil.createJSONObject();
+			JSONObject jsonObjectSectionBody =
+				JSONFactoryUtil.createJSONObject();
+			JSONObject jsonObjectSectionContext =
+				JSONFactoryUtil.createJSONObject();
+			JSONArray jsonArrayBlocks = JSONFactoryUtil.createJSONArray();
+			JSONArray jsonArrayContext = JSONFactoryUtil.createJSONArray();
 
-      jsonObjectSectionBody.put("type", "section");
+			jsonObjectSectionHeader.put(
+				"text",
+				JSONFactoryUtil.createJSONObject(
+				).put(
+					"type", "plain_text"
+				).put(
+					"text",
+					String.format(
+						"Audit Message from: %s%nBelow the Audit Message details.",
+						SlackAuditMessageProcessor.class.getSimpleName())
+				));
+			jsonObjectSectionHeader.put("type", "section");
 
-      jsonObjectSectionBody.put(
-          "text",
-          JSONFactoryUtil.createJSONObject()
-              .put("type", "mrkdwn")
-              .put("text", String.format("```%s```", auditMessage.toJSONObject().toString(4))));
+			jsonObjectSectionBody.put("type", "section");
 
-      jsonObjectSectionContext.put("type", "context");
-      jsonArrayContext.put(
-          JSONFactoryUtil.createJSONObject()
-              .put("type", "plain_text")
-              .put("text", "Author: Slack Audit Message Processor"));
-      jsonObjectSectionContext.put("elements", jsonArrayContext);
+			jsonObjectSectionBody.put(
+				"text",
+				JSONFactoryUtil.createJSONObject(
+				).put(
+					"type", "mrkdwn"
+				).put(
+					"text",
+					String.format(
+						"```%s```",
+						auditMessage.toJSONObject(
+						).toString(
+							4
+						))
+				));
 
-      jsonArrayBlocks.put(jsonObjectSectionHeader);
-      jsonArrayBlocks.put(jsonObjectSectionBody);
-      jsonArrayBlocks.put(jsonObjectSectionContext);
+			jsonObjectSectionContext.put("type", "context");
+			jsonArrayContext.put(
+				JSONFactoryUtil.createJSONObject(
+				).put(
+					"type", "plain_text"
+				).put(
+					"text", "Author: Slack Audit Message Processor"
+				));
+			jsonObjectSectionContext.put("elements", jsonArrayContext);
 
-      Http.Options options = new Http.Options();
-      options.setLocation(_slackAuditMessageProcessorConfiguration.webHookUrl());
-      options.setPost(true);
-      options.setBody(
-          JSONFactoryUtil.createJSONObject().put("blocks", jsonArrayBlocks).toString(),
-          "application/json",
-          "UTF-8");
+			jsonArrayBlocks.put(jsonObjectSectionHeader);
+			jsonArrayBlocks.put(jsonObjectSectionBody);
+			jsonArrayBlocks.put(jsonObjectSectionContext);
 
-      if (_log.isDebugEnabled()) {
-        _log.debug("Slack processor request body => " + options.getBody().getContent());
-      }
+			Http.Options options = new Http.Options();
+			options.setLocation(
+				_slackAuditMessageProcessorConfiguration.webHookUrl());
+			options.setPost(true);
+			options.setBody(
+				JSONFactoryUtil.createJSONObject(
+				).put(
+					"blocks", jsonArrayBlocks
+				).toString(),
+				"application/json", "UTF-8");
 
-      String responseContent = HttpUtil.URLtoString(options);
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Slack processor request body => " +
+						options.getBody(
+						).getContent());
+			}
 
-      if (_log.isDebugEnabled()) {
-        _log.debug("Slack processor response content => " + responseContent);
-      }
+			String responseContent = HttpUtil.URLtoString(options);
 
-      Http.Response response = options.getResponse();
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Slack processor response content => " + responseContent);
+			}
 
-      if (response.getResponseCode() != Response.Status.OK.getStatusCode()) {
-        _log.error(
-            String.format(
-                "Error on send Audit Message to Slack: {response code: %s, response content: %s}",
-                response.getResponseCode(), responseContent));
-      }
+			Http.Response response = options.getResponse();
 
-      if (_log.isDebugEnabled()) {
-        _log.debug("Slack processor response code => " + response.getResponseCode());
-      }
-    }
-  }
+			if (response.getResponseCode() !=
+					Response.Status.OK.getStatusCode()) {
 
-  private static final Log _log = LogFactoryUtil.getLog(SlackAuditMessageProcessor.class);
+				_log.error(
+					String.format(
+						"Error on send Audit Message to Slack: {response code: %s, response content: %s}",
+						response.getResponseCode(), responseContent));
+			}
 
-  private SlackAuditMessageProcessorConfiguration _slackAuditMessageProcessorConfiguration;
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Slack processor response code => " +
+						response.getResponseCode());
+			}
+		}
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		SlackAuditMessageProcessor.class);
+
+	private SlackAuditMessageProcessorConfiguration
+		_slackAuditMessageProcessorConfiguration;
+
 }

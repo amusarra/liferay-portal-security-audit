@@ -1,4 +1,20 @@
+buildscript {
+    dependencies {
+        classpath "com.github.docker-java:docker-java:3.3.2"
+        classpath "com.github.docker-java:docker-java-transport-httpclient5:3.3.2"
+        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.workspace", version: "8.0.1"
+    }
+
+    repositories {
+        maven {
+            url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+        }
+    }
+}
+
 include(
         'portal-security-audit-capture-events',
         'portal-security-audit-message-processor'
 )
+
+apply plugin: "com.liferay.workspace"
