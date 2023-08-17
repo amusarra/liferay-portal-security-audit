@@ -3,8 +3,6 @@ on:
         push:
                 branches:
                         - master
-                        - feature/migrazione-liferay-74
-                        - feature/webhook-audit-message-processor
         pull_request:
                 types: [opened, synchronize, reopened]
 jobs:
