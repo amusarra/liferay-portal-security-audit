@@ -1,9 +1,10 @@
-name: SonarCloud
+name: Build, analyze and build Docker image
 on:
         push:
                 branches:
                         - master
                         - feature/migrazione-liferay-74
+                        - feature/webhook-audit-message-processor
         pull_request:
                 types: [opened, synchronize, reopened]
 jobs:
@@ -36,3 +37,5 @@ jobs:
                                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
                                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
                           run: ./gradlew build sonar --info
+                        - name: Build the Docker image
+                          run: ./gradlew buildDockerImage
