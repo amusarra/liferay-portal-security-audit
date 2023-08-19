@@ -46,8 +46,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Change the Docker Tag image
-        run: docker tag liferay-portal-security-audit-liferay:7.4.3.85-ga85 ${{ secrets.DOCKER_USERNAME }}/liferay-portal-security-audit:1.5.0_7.4.3.85-ga85
       - name: Build and push Docker image to Docker Hub
         uses: docker/build-push-action@v4
         with:
