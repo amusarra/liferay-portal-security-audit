@@ -1,48 +1,48 @@
 name: Build
 on:
-        push:
-                branches:
-                        - master
-        pull_request:
-                types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, synchronize, reopened ]
 jobs:
-        build:
-                name: Build, analyze, build Docker image and push to Docker Hub
-                runs-on: ubuntu-latest
-                steps:
-                        - uses: actions/checkout@v3
-                          with:
-                                  fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-                        - name: Set up JDK 11
-                          uses: actions/setup-java@v3
-                          with:
-                                  java-version: 11
-                                  distribution: 'zulu' # Alternative distribution options are available
-                        - name: Cache SonarCloud packages
-                          uses: actions/cache@v3
-                          with:
-                                  path: ~/.sonar/cache
-                                  key: ${{ runner.os }}-sonar
-                                  restore-keys: ${{ runner.os }}-sonar
-                        - name: Cache Gradle packages
-                          uses: actions/cache@v3
-                          with:
-                                  path: ~/.gradle/caches
-                                  key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-                                  restore-keys: ${{ runner.os }}-gradle
-                        - name: Build and analyze
-                          env:
-                                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-                                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-                          run: ./gradlew build sonar --info
-                        - name: Build the Docker image
-                          run: ./gradlew buildDockerImage
-                        - name: Log in to Docker Hub
-                          uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-                          with:
-                            username: ${{ secrets.DOCKER_USERNAME }}
-                            password: ${{ secrets.DOCKER_PASSWORD }}
-                        - name: Change the Docker Tag image
-                          run: docker tag liferay-portal-security-audit-liferay:7.4.3.85-ga85 ${{ secrets.DOCKER_USERNAME }}/liferay-portal-security-audit:1.5.0_7.4.3.85-ga85
-                        - name: Push the Docker image
-                          run: docker push ${{ secrets.DOCKER_USERNAME }}/liferay-portal-security-audit:1.5.0_7.4.3.85-ga85
+  build:
+    name: Build, analyze, build Docker image and push to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: 'zulu' # Alternative distribution options are available
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonar --info
+      - name: Build the Docker image
+        run: ./gradlew buildDockerImage
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Change the Docker Tag image
+        run: docker tag liferay-portal-security-audit-liferay:7.4.3.85-ga85 ${{ secrets.DOCKER_USERNAME }}/liferay-portal-security-audit:1.5.0_7.4.3.85-ga85
+      - name: Push the Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/liferay-portal-security-audit:1.5.0_7.4.3.85-ga85
